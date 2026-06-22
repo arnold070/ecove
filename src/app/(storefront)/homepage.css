@@ -1,0 +1,74 @@
+/* ── Promo Banner Card ────────────────────────────────────────────────────────
+   Each banner theme is declared here as CSS custom properties on the card root
+   via [data-theme] selectors. Zero inline styles needed in the component.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Per-theme colour tokens */
+.pb-card[data-theme="services"]   { --pb-bg: linear-gradient(160deg,#fde8cc 0%,#f9c27b 100%); --pb-accent: #e07b20; --pb-text: #1a0a00; }
+.pb-card[data-theme="phones"]     { --pb-bg: linear-gradient(160deg,#fde4b0 0%,#fbba5b 100%); --pb-accent: #d4720e; --pb-text: #1a0800; }
+.pb-card[data-theme="computing"]  { --pb-bg: linear-gradient(160deg,#fdf4d8 0%,#f5d97a 100%); --pb-accent: #b8860b; --pb-text: #1a1000; }
+.pb-card[data-theme="fashion"]    { --pb-bg: linear-gradient(160deg,#d4edf7 0%,#9ed8ef 100%); --pb-accent: #1a6e97; --pb-text: #0a1a2a; }
+.pb-card[data-theme="sneakers"]   { --pb-bg: linear-gradient(160deg,#d4f0e8 0%,#86d9ba 100%); --pb-accent: #0e7a56; --pb-text: #041a10; }
+.pb-card[data-theme="mobile"]     { --pb-bg: linear-gradient(160deg,#e8d4f5 0%,#c586ec 100%); --pb-accent: #7c1fa8; --pb-text: #1a0430; }
+.pb-card[data-theme="arrival"]    { --pb-bg: linear-gradient(160deg,#f5edd4 0%,#e8c96a 100%); --pb-accent: #9a6e00; --pb-text: #1a1000; }
+
+/* Card shell — width from grid; height from aspect ratio so nothing crops */
+.pb-card {
+  aspect-ratio: 3 / 4;
+}
+
+/* Background — reads gradient from theme token */
+.pb-demo-bg {
+  background: var(--pb-bg);
+}
+
+/* "BEST DEALS" accent tag */
+.pb-accent-tag {
+  background: var(--pb-accent);
+  min-width: 52px;
+}
+
+/* "LIMITED TIME" sub-tag */
+.pb-limited-tag {
+  background: #f5c400;
+}
+
+/* Emoji sizes */
+.pb-emoji-lg { font-size: 3.5rem; }
+.pb-emoji-sm { font-size: 1.6rem; }
+
+/* Text colours — read from theme token */
+.pb-text       { color: var(--pb-text); }
+.pb-text-muted { color: var(--pb-text); opacity: 0.7; }
+.pb-trust-text { color: var(--pb-text); opacity: 0.65; }
+
+/* CTA button */
+.pb-cta-btn {
+  border-color: var(--pb-accent);
+  color:        var(--pb-accent);
+  background:   rgba(255, 255, 255, 0.7);
+}
+
+/* Image overlay: hidden by default, fades in via .is-loaded */
+.pb-img-layer {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.pb-img-layer.is-loaded {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hover overlay — pure CSS, no JS mouse handlers */
+.pb-hover-overlay { background: rgba(0, 0, 0, 0); transition: background 0.2s ease; }
+.pb-card:hover .pb-hover-overlay { background: rgba(0, 0, 0, 0.1); }
+
+/* ── Campaign banner — dynamic background driven by --campaign-bg CSS var ── */
+.campaign-banner-bg {
+  background: var(--campaign-bg, #f68b1f);
+}
+
+/* ── Promo scroll track — hide scrollbar cross-browser ───────────────────── */
+.promo-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+.promo-scroll::-webkit-scrollbar { display: none; }
