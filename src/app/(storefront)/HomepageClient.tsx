@@ -673,12 +673,14 @@ export default function HomepageClient({
 
       {/* ── Promo Banner Strip ───────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
-            { bg: 'linear-gradient(135deg,#c0392b,#e74c3c)', icon: '📱', title: 'New Phones Arrived', sub: 'iPhones, Samsung & more', href: '/categories/phones-tablets' },
-            { bg: 'linear-gradient(135deg,#1d4ed8,#3b82f6)', icon: '💻', title: 'Work From Anywhere', sub: 'Laptops for every budget', href: '/categories/computing' },
-            { bg: 'linear-gradient(135deg,#7c3aed,#a78bfa)', icon: '👗', title: 'Fashion Week Picks', sub: 'Trending styles for you', href: '/categories/fashion' },
-          ].map(({ bg, icon, title, sub, href }) => (
+            { bg: 'linear-gradient(135deg,#c0392b,#e74c3c)', icon: '📱', title: 'New Phones Arrived', sub: 'iPhones, Samsung & more', href: '/categories/phones-tablets', cta: 'Shop now →' },
+            { bg: 'linear-gradient(135deg,#1d4ed8,#3b82f6)', icon: '💻', title: 'Work From Anywhere', sub: 'Laptops for every budget', href: '/categories/computing', cta: 'Shop now →' },
+            { bg: 'linear-gradient(135deg,#7c3aed,#a78bfa)', icon: '👗', title: 'Fashion Week Picks', sub: 'Trending styles for you', href: '/categories/fashion', cta: 'Shop now →' },
+            { bg: 'linear-gradient(135deg,#064e3b,#059669)', icon: '🛠️', title: 'Hire a Professional', sub: 'Repairs, design & more', href: '/categories/services', cta: 'Book now →' },
+            { bg: 'linear-gradient(135deg,#78350f,#d97706)', icon: '🛒', title: 'Fresh Groceries', sub: 'Delivered to your door', href: '/categories/groceries', cta: 'Shop now →' },
+          ].map(({ bg, icon, title, sub, href, cta }) => (
             <Link key={href} href={href}
               className="flex items-center gap-4 p-5 rounded-2xl text-white hover:scale-[1.02] transition-transform shadow-sm"
               style={{ background: bg }}>
@@ -686,7 +688,7 @@ export default function HomepageClient({
               <div>
                 <p className="font-extrabold text-base">{title}</p>
                 <p className="text-sm opacity-75">{sub}</p>
-                <p className="text-xs font-semibold mt-1 opacity-90">Shop now →</p>
+                <p className="text-xs font-semibold mt-1 opacity-90">{cta}</p>
               </div>
             </Link>
           ))}
@@ -746,6 +748,37 @@ export default function HomepageClient({
           </div>
         </section>
       )}
+
+      {/* ── Services Across Categories ──────────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 py-4 pb-8">
+        <div className="rounded-2xl p-6" style={{ background: 'linear-gradient(135deg,#1a1a2e,#16213e)' }}>
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h3 className="text-lg font-extrabold text-white">Services for Every Need</h3>
+              <p className="text-sm text-gray-400 mt-0.5">Trusted professionals available across all categories</p>
+            </div>
+            <Link href="/categories/services" className="text-sm font-semibold text-emerald-400 hover:text-emerald-300 whitespace-nowrap">
+              All Services →
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            {[
+              { icon: '📱', name: 'Phone Repair', href: '/categories/services' },
+              { icon: '💻', name: 'Tech Support', href: '/categories/services' },
+              { icon: '📺', name: 'TV & Electronics', href: '/categories/services' },
+              { icon: '✂️', name: 'Tailoring', href: '/categories/services' },
+              { icon: '🍱', name: 'Grocery Delivery', href: '/categories/services' },
+              { icon: '🔌', name: 'Generator Repair', href: '/categories/services' },
+            ].map(({ icon, name, href }) => (
+              <Link key={name} href={href}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl text-white bg-white/10 hover:bg-white/20 transition-colors">
+                <span className="text-3xl">{icon}</span>
+                <span className="text-xs font-semibold text-center leading-tight">{name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* ── Fashion Collection ───────────────────────────────────────────────── */}
       {fashion.length > 0 && (
