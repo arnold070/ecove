@@ -34,6 +34,11 @@ export const metadata: Metadata = {
     description: 'Shop electronics, fashion, home appliances, phones and more at the best prices in Nigeria.',
     site: '@ecoveng',
   },
+  icons: {
+    icon: '/images/ecove-logo.png',
+    apple: '/images/ecove-logo.png',
+    shortcut: '/images/ecove-logo.png',
+  },
   robots: {
     index: true,
     follow: true,

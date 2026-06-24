@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import api from '@/lib/apiClient'
 import toast from 'react-hot-toast'
@@ -36,7 +37,10 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="font-display text-3xl font-extrabold" style={{ color: '#f68b1f' }}>eco<span className="text-gray-800">ve</span></Link>
+          <Link href="/" className="inline-flex flex-col items-center gap-1">
+            <Image src="/images/ecove-logo.png" alt="Ecove" width={72} height={72} priority />
+            <span className="text-2xl font-extrabold text-orange-500">eco<span className="text-gray-800">ve</span></span>
+          </Link>
           <p className="text-gray-500 mt-2 text-sm">Create your free account</p>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">

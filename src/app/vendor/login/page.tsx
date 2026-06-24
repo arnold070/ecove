@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useAuth } from '@/context/AuthContext'
 import toast from 'react-hot-toast'
 import { useSearchParams } from 'next/navigation'
@@ -44,8 +45,9 @@ function VendorLoginContent() {
     <div className="min-h-screen flex" style={{ background: '#f5f5f5' }}>
       {/* Left panel */}
       <div className="hidden lg:flex w-1/2 flex-col justify-center px-16" style={{ background: '#1a1a1a' }}>
-        <div className="text-4xl font-extrabold text-white mb-3">
-          eco<span style={{ color: '#f68b1f' }}>ve</span>
+        <div className="flex items-center gap-3 mb-3">
+          <Image src="/images/ecove-logo.png" alt="Ecove" width={48} height={48} />
+          <span className="text-4xl font-extrabold text-white">eco<span className="text-orange-400">ve</span></span>
         </div>
         <h2 className="text-2xl font-bold text-white mb-4">Vendor Dashboard</h2>
         <p className="text-gray-400 leading-relaxed mb-8">

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Link from 'next/link'
+import Image from 'next/image'
 import api from '@/lib/apiClient'
 import toast from 'react-hot-toast'
 
@@ -84,7 +85,10 @@ export default function VendorRegisterPage() {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <Link href="/" className="font-display text-3xl font-extrabold" style={{ color: '#f68b1f' }}>eco<span className="text-gray-800">ve</span></Link>
+          <Link href="/" className="inline-flex flex-col items-center gap-1">
+            <Image src="/images/ecove-logo.png" alt="Ecove" width={72} height={72} priority />
+            <span className="text-2xl font-extrabold text-orange-500">eco<span className="text-gray-800">ve</span></span>
+          </Link>
           <h1 className="text-xl font-extrabold text-gray-900 mt-3">Become an Ecove Vendor</h1>
           <p className="text-gray-400 text-sm mt-1">Join Nigeria's growing marketplace. Applications reviewed within 48 hours.</p>
         </div>
