@@ -32,6 +32,14 @@ const CAT_META: Record<string, { icon: string; color: string; light: string }> =
   'computing':             { icon: '💻', color: '#3b82f6', light: '#eff6ff' },
   'electronics':           { icon: '📺', color: '#8b5cf6', light: '#f5f3ff' },
   'fashion':               { icon: '👗', color: '#ec4899', light: '#fdf2f8' },
+  'home-kitchen':          { icon: '🏠', color: '#f59e0b', light: '#fffbeb' },
+  'beauty-health':         { icon: '💄', color: '#db2777', light: '#fdf2f8' },
+  'baby-products':         { icon: '👶', color: '#fb923c', light: '#fff7ed' },
+  'sports-outdoors':       { icon: '⚽', color: '#16a34a', light: '#f0fdf4' },
+  'groceries':             { icon: '🛒', color: '#15803d', light: '#f0fdf4' },
+  'automotive':            { icon: '🚗', color: '#475569', light: '#f8fafc' },
+  'gaming':                { icon: '🎮', color: '#7c3aed', light: '#f5f3ff' },
+  'books-education':       { icon: '📚', color: '#1d4ed8', light: '#eff6ff' },
   'services':              { icon: '🛠️', color: '#10b981', light: '#ecfdf5' },
   'services-web-tech':     { icon: '💻', color: '#3b82f6', light: '#eff6ff' },
   'services-design':       { icon: '🎨', color: '#f59e0b', light: '#fffbeb' },
@@ -473,8 +481,8 @@ export default function HomepageClient({
   bestSellers: Product[]; newest: Product[]; fashion: Product[]
   banners: Banner[]; vendorCount?: number; productCount?: number
 }) {
-  // Separate top-level vs sub-cats
-  const topCats    = categories.filter(c => !c.slug.includes('-') || ['phones-tablets'].includes(c.slug))
+  // Top-level categories (no parent — all seeded cats are top-level)
+  const topCats    = categories
   const fashionCat = categories.find(c => c.slug === 'fashion')
   const servicesCat = categories.find(c => c.slug === 'services')
   const fashionSubcats: Category[] = fashionCat?.children || []
