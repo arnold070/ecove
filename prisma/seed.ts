@@ -30,18 +30,12 @@ async function main() {
 
   // ── 2. Categories ────────────────────────────────────────
   const categories = [
-    { name: 'Phones & Tablets',  slug: 'phones-tablets',   icon: '📱', order: 1 },
-    { name: 'Computing',         slug: 'computing',         icon: '💻', order: 2 },
-    { name: 'Electronics',       slug: 'electronics',       icon: '📺', order: 3 },
-    { name: 'Fashion',           slug: 'fashion',           icon: '👗', order: 4 },
-    { name: 'Home & Kitchen',    slug: 'home-kitchen',      icon: '🏠', order: 5 },
-    { name: 'Beauty & Health',   slug: 'beauty-health',     icon: '💄', order: 6 },
-    { name: 'Baby Products',     slug: 'baby-products',     icon: '👶', order: 7 },
-    { name: 'Sports & Outdoors', slug: 'sports-outdoors',   icon: '⚽', order: 8 },
-    { name: 'Groceries',         slug: 'groceries',         icon: '🛒', order: 9 },
-    { name: 'Automotive',        slug: 'automotive',        icon: '🚗', order: 10 },
-    { name: 'Gaming',            slug: 'gaming',            icon: '🎮', order: 11 },
-    { name: 'Books & Education', slug: 'books-education',   icon: '📚', order: 12 },
+    { name: 'Phones & Tablets', slug: 'phones-tablets', icon: '📱', order: 1 },
+    { name: 'Computing',        slug: 'computing',       icon: '💻', order: 2 },
+    { name: 'Electronics',      slug: 'electronics',     icon: '📺', order: 3 },
+    { name: 'Fashion',          slug: 'fashion',         icon: '👗', order: 4 },
+    { name: 'Groceries',        slug: 'groceries',       icon: '🛒', order: 5 },
+    { name: 'Services',         slug: 'services',        icon: '🛠️', order: 6 },
   ]
 
   for (const cat of categories) {
