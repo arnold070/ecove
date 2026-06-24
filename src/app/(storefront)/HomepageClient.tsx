@@ -27,29 +27,30 @@ interface Banner {
 }
 
 // ── Category meta ─────────────────────────────────────────────────────────────
-const CAT_META: Record<string, { icon: string; color: string; light: string }> = {
-  'phones-tablets':        { icon: '📱', color: '#f68b1f', light: '#fff7ed' },
-  'computing':             { icon: '💻', color: '#3b82f6', light: '#eff6ff' },
-  'electronics':           { icon: '📺', color: '#8b5cf6', light: '#f5f3ff' },
-  'fashion':               { icon: '👗', color: '#ec4899', light: '#fdf2f8' },
-  'groceries':             { icon: '🛒', color: '#15803d', light: '#f0fdf4' },
-  'services':              { icon: '🛠️', color: '#10b981', light: '#ecfdf5' },
-  'services-web-tech':     { icon: '💻', color: '#3b82f6', light: '#eff6ff' },
-  'services-design':       { icon: '🎨', color: '#f59e0b', light: '#fffbeb' },
-  'services-digital-marketing': { icon: '📊', color: '#06b6d4', light: '#ecfeff' },
-  'services-photography':  { icon: '📸', color: '#8b5cf6', light: '#f5f3ff' },
-  'services-home-repairs': { icon: '🔧', color: '#ef4444', light: '#fef2f2' },
-  'services-tutoring':     { icon: '📚', color: '#10b981', light: '#ecfdf5' },
-  'fashion-women':         { icon: '👩', color: '#ec4899', light: '#fdf2f8' },
-  'fashion-men':           { icon: '👔', color: '#1d4ed8', light: '#eff6ff' },
-  'fashion-kids':          { icon: '🧒', color: '#f59e0b', light: '#fffbeb' },
-  'fashion-footwear':      { icon: '👟', color: '#6d28d9', light: '#f5f3ff' },
-  'fashion-accessories':   { icon: '👜', color: '#be185d', light: '#fdf2f8' },
-  'fashion-traditional':   { icon: '🪡', color: '#b45309', light: '#fffbeb' },
+const CAT_META: Record<string, { icon: string; color: string; light: string; lightClass: string }> = {
+  'phones-tablets':             { icon: '📱', color: '#f68b1f', light: '#fff7ed', lightClass: 'bg-orange-50' },
+  'computing':                  { icon: '💻', color: '#3b82f6', light: '#eff6ff', lightClass: 'bg-blue-50'   },
+  'electronics':                { icon: '📺', color: '#8b5cf6', light: '#f5f3ff', lightClass: 'bg-violet-50' },
+  'fashion':                    { icon: '👗', color: '#ec4899', light: '#fdf2f8', lightClass: 'bg-pink-50'   },
+  'groceries':                  { icon: '🛒', color: '#15803d', light: '#f0fdf4', lightClass: 'bg-green-50'  },
+  'services':                   { icon: '🛠️', color: '#10b981', light: '#ecfdf5', lightClass: 'bg-emerald-50'},
+  'services-web-tech':          { icon: '💻', color: '#3b82f6', light: '#eff6ff', lightClass: 'bg-blue-50'   },
+  'services-design':            { icon: '🎨', color: '#f59e0b', light: '#fffbeb', lightClass: 'bg-amber-50'  },
+  'services-digital-marketing': { icon: '📊', color: '#06b6d4', light: '#ecfeff', lightClass: 'bg-cyan-50'   },
+  'services-photography':       { icon: '📸', color: '#8b5cf6', light: '#f5f3ff', lightClass: 'bg-violet-50' },
+  'services-home-repairs':      { icon: '🔧', color: '#ef4444', light: '#fef2f2', lightClass: 'bg-red-50'    },
+  'services-tutoring':          { icon: '📚', color: '#10b981', light: '#ecfdf5', lightClass: 'bg-emerald-50'},
+  'fashion-women':              { icon: '👩', color: '#ec4899', light: '#fdf2f8', lightClass: 'bg-pink-50'   },
+  'fashion-men':                { icon: '👔', color: '#1d4ed8', light: '#eff6ff', lightClass: 'bg-blue-50'   },
+  'fashion-kids':               { icon: '🧒', color: '#f59e0b', light: '#fffbeb', lightClass: 'bg-amber-50'  },
+  'fashion-footwear':           { icon: '👟', color: '#6d28d9', light: '#f5f3ff', lightClass: 'bg-violet-50' },
+  'fashion-accessories':        { icon: '👜', color: '#be185d', light: '#fdf2f8', lightClass: 'bg-pink-50'   },
+  'fashion-traditional':        { icon: '🪡', color: '#b45309', light: '#fffbeb', lightClass: 'bg-amber-50'  },
 }
-const catIcon  = (slug: string) => CAT_META[slug]?.icon  || '🏷️'
-const catColor = (slug: string) => CAT_META[slug]?.color || '#f68b1f'
-const catLight = (slug: string) => CAT_META[slug]?.light || '#fff7ed'
+const catIcon       = (slug: string) => CAT_META[slug]?.icon       || '🏷️'
+const catColor      = (slug: string) => CAT_META[slug]?.color      || '#f68b1f'
+const catLight      = (slug: string) => CAT_META[slug]?.light      || '#fff7ed'
+const catLightClass = (slug: string) => CAT_META[slug]?.lightClass || 'bg-orange-50'
 
 // ── Demo promo banners — colours live entirely in homepage.css via data-theme ──
 const PROMO_BANNERS = [
@@ -522,8 +523,7 @@ export default function HomepageClient({
             {categories.map(cat => (
               <Link key={cat.id} href={`/categories/${cat.slug}`}
                 className="group flex items-center gap-3 px-4 py-2.5 text-sm border-b border-gray-50 last:border-0 hover:bg-orange-50 transition-colors flex-1">
-                <span className="w-8 h-8 rounded-lg flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform"
-                  style={{ background: catLight(cat.slug) }}>
+                <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform ${catLightClass(cat.slug)}`}>
                   {catIcon(cat.slug)}
                 </span>
                 <span className="flex-1 font-semibold text-gray-700 group-hover:text-orange-700">{cat.name}</span>
@@ -538,9 +538,9 @@ export default function HomepageClient({
           {/* Right promo stack — db side_card banners override hardcoded design */}
           <div className="hidden lg:flex flex-col gap-3" style={{ minHeight: '360px' }}>
             {[
-              sideLeft  || { title: 'Flash Sale',    subtitle: 'Up to 60% off',         ctaText: 'Grab Deals →', ctaLink: '/search?flashSale=true',  bgColor: 'linear-gradient(135deg,#7f0000,#dc2626)', imageUrl: null, emoji: '⚡' },
-              sideRight || { title: 'Best Sellers',  subtitle: 'Most loved products',    ctaText: 'Shop Now →',   ctaLink: '/search?bestSeller=true',  bgColor: 'linear-gradient(135deg,#1e3a8a,#3b82f6)', imageUrl: null, emoji: '🏆' },
-              {             title: 'Hire a Pro',     subtitle: 'Services nationwide',    ctaText: 'Browse →',     ctaLink: '/categories/services',     bgColor: 'linear-gradient(135deg,#064e3b,#059669)', imageUrl: null, emoji: '🛠️' },
+              sideLeft  || { title: 'Flash Sale',      subtitle: 'Up to 60% off',           ctaText: 'Grab Deals →', ctaLink: '/search?flashSale=true',   bgColor: 'linear-gradient(135deg,#7f0000,#dc2626)', imageUrl: null, emoji: '⚡' },
+              sideRight || { title: 'Best Sellers',    subtitle: 'Most loved products',      ctaText: 'Shop Now →',   ctaLink: '/search?bestSeller=true',   bgColor: 'linear-gradient(135deg,#1e3a8a,#3b82f6)', imageUrl: null, emoji: '🏆' },
+              {             title: 'Fresh Groceries',  subtitle: 'Delivered to your door',   ctaText: 'Order Now →',  ctaLink: '/categories/groceries',     bgColor: 'linear-gradient(135deg,#78350f,#d97706)', imageUrl: null, emoji: '🛒' },
             ].map((card: any) => (
               <Link key={card.title} href={card.ctaLink}
                 className="flex-1 rounded-2xl p-5 text-white flex flex-col justify-between overflow-hidden relative hover:scale-[1.02] transition-transform shadow-sm"
@@ -563,21 +563,36 @@ export default function HomepageClient({
         </div>
       </div>
 
+      {/* ── Mobile Category Bar (hidden on lg where sidebar shows) ─────────── */}
+      <div className="lg:hidden bg-white border-b border-gray-100">
+        <div className="flex gap-3 overflow-x-auto px-4 py-3 scrollbar-hide">
+          {categories.map(cat => (
+            <Link key={cat.id} href={`/categories/${cat.slug}`}
+              className="flex flex-col items-center gap-1.5 shrink-0 w-16 group">
+              <span className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform ${catLightClass(cat.slug)}`}>
+                {catIcon(cat.slug)}
+              </span>
+              <span className="text-[10px] font-semibold text-gray-600 text-center leading-tight line-clamp-2">{cat.name}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {/* ── Trust Strip ─────────────────────────────────────────────────────── */}
       <div className="bg-white border-y border-gray-100 my-4">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: '🚚', title: 'Free Delivery', sub: 'Orders over ₦20,000' },
-              { icon: '🔒', title: 'Secure Payment', sub: 'Paystack & Flutterwave' },
-              { icon: '✅', title: 'Verified Sellers', sub: 'All vendors screened' },
-              { icon: '↩️', title: 'Easy Returns', sub: '7-day return policy' },
-            ].map(({ icon, title, sub }) => (
+              { icon: '🚚', bg: 'bg-orange-50', title: 'Free Delivery',    sub: 'Orders over ₦20,000' },
+              { icon: '🔒', bg: 'bg-blue-50',   title: 'Secure Payment',   sub: 'Paystack & Flutterwave' },
+              { icon: '✅', bg: 'bg-green-50',  title: 'Verified Sellers', sub: 'All vendors screened' },
+              { icon: '↩️', bg: 'bg-purple-50', title: 'Easy Returns',     sub: '7-day return policy' },
+            ].map(({ icon, bg, title, sub }) => (
               <div key={title} className="flex items-center gap-3 py-1">
-                <span className="text-2xl">{icon}</span>
+                <span className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${bg}`}>{icon}</span>
                 <div>
-                  <p className="text-xs font-bold text-gray-800">{title}</p>
-                  <p className="text-[11px] text-gray-400">{sub}</p>
+                  <p className="text-sm font-bold text-gray-800">{title}</p>
+                  <p className="text-xs text-gray-400">{sub}</p>
                 </div>
               </div>
             ))}
@@ -711,43 +726,11 @@ export default function HomepageClient({
 
       {/* ── Featured Products ────────────────────────────────────────────────── */}
       {featured.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 py-6">
-          <SectionHeader title="Featured Products" sub="Handpicked by our team" href="/search?featured=true" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {featured.slice(0, 12).map(p => <ProductCard key={p.id} p={p} />)}
-          </div>
-        </section>
-      )}
-
-      {/* ── Hire a Professional (Services) ──────────────────────────────────── */}
-      {servicesSubcats.length > 0 && (
-        <section className="py-10" style={{ background: 'linear-gradient(135deg,#ecfdf5,#f0fdf4)' }}>
+        <section className="bg-white py-8 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-end justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <span className="w-1.5 h-7 rounded-full shrink-0 bg-emerald-500" />
-                <div>
-                  <h2 className="text-xl font-extrabold text-gray-900">Hire a Professional</h2>
-                  <p className="text-sm text-gray-500 mt-0.5">Verified service providers across Nigeria</p>
-                </div>
-              </div>
-              <Link href="/categories/services" className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
-                All Services →
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {servicesSubcats.map(cat => <ServiceCard key={cat.id} cat={cat} />)}
-            </div>
-            <div className="mt-6 bg-white rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm border border-emerald-100">
-              <div>
-                <p className="font-extrabold text-gray-900 text-lg">Are you a service provider?</p>
-                <p className="text-sm text-gray-500">Join Ecove and reach thousands of customers across Nigeria</p>
-              </div>
-              <Link href="/vendor/register"
-                className="shrink-0 px-7 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-opacity"
-                style={{ background: '#10b981' }}>
-                List Your Service →
-              </Link>
+            <SectionHeader title="Featured Products" sub="Handpicked by our team" href="/search?featured=true" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {featured.slice(0, 12).map(p => <ProductCard key={p.id} p={p} />)}
             </div>
           </div>
         </section>
@@ -755,103 +738,19 @@ export default function HomepageClient({
 
       {/* ── Best Sellers ─────────────────────────────────────────────────────── */}
       {bestSellers.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 py-8">
-          <SectionHeader title="Best Sellers" sub="Most loved by our customers" href="/search?bestSeller=true" label="View all" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {bestSellers.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
-          </div>
-        </section>
-      )}
-
-      {/* ── Services Across Categories ──────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 py-4 pb-8">
-        <div className="rounded-2xl p-6" style={{ background: 'linear-gradient(135deg,#1a1a2e,#16213e)' }}>
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h3 className="text-lg font-extrabold text-white">Services for Every Need</h3>
-              <p className="text-sm text-gray-400 mt-0.5">Trusted professionals available across all categories</p>
-            </div>
-            <Link href="/categories/services" className="text-sm font-semibold text-emerald-400 hover:text-emerald-300 whitespace-nowrap">
-              All Services →
-            </Link>
-          </div>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-            {[
-              { icon: '📱', name: 'Phone Repair', href: '/categories/services' },
-              { icon: '💻', name: 'Tech Support', href: '/categories/services' },
-              { icon: '📺', name: 'TV & Electronics', href: '/categories/services' },
-              { icon: '✂️', name: 'Tailoring', href: '/categories/services' },
-              { icon: '🍱', name: 'Grocery Delivery', href: '/categories/services' },
-              { icon: '🔌', name: 'Generator Repair', href: '/categories/services' },
-            ].map(({ icon, name, href }) => (
-              <Link key={name} href={href}
-                className="flex flex-col items-center gap-2 p-4 rounded-xl text-white bg-white/10 hover:bg-white/20 transition-colors">
-                <span className="text-3xl">{icon}</span>
-                <span className="text-xs font-semibold text-center leading-tight">{name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Fashion Collection ───────────────────────────────────────────────── */}
-      {fashion.length > 0 && (
-        <section className="py-10" style={{ background: 'linear-gradient(135deg,#fdf2f8,#fce7f3)' }}>
+        <section className="bg-white py-8 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-end justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <span className="w-1.5 h-7 rounded-full shrink-0 bg-pink-500" />
-                <div>
-                  <h2 className="text-xl font-extrabold text-gray-900">Fashion Collection</h2>
-                  <p className="text-sm text-gray-500 mt-0.5">Ankara, office wear, footwear & accessories</p>
-                </div>
-              </div>
-              <Link href="/categories/fashion" className="text-sm font-semibold text-pink-600 hover:text-pink-700 flex items-center gap-1">
-                All Fashion →
-              </Link>
+            <SectionHeader title="Best Sellers" sub="Most loved by our customers" href="/search?bestSeller=true" label="View all" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {bestSellers.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-              {/* Sub-category links */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-pink-100 flex flex-col gap-2">
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Browse by type</p>
-                {fashionSubcats.map(cat => (
-                  <Link key={cat.id} href={`/categories/${cat.slug}`}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-pink-50 transition-colors group">
-                    <span className="text-xl group-hover:scale-110 transition-transform">{catIcon(cat.slug)}</span>
-                    <span className="text-sm font-semibold text-gray-700 group-hover:text-pink-700">{cat.name}</span>
-                    <span className="ml-auto text-gray-300 text-xs group-hover:text-pink-400">→</span>
-                  </Link>
-                ))}
-                <Link href="/categories/fashion"
-                  className="mt-2 block text-center py-2.5 rounded-xl text-sm font-bold text-white transition-opacity hover:opacity-90"
-                  style={{ background: '#ec4899' }}>
-                  See All Fashion
-                </Link>
-              </div>
-
-              {/* Fashion products grid */}
-              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {fashion.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── New Arrivals ─────────────────────────────────────────────────────── */}
-      {newest.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 py-8">
-          <SectionHeader title="New Arrivals" sub="Just landed on Ecove" href="/search?sort=newest" label="See all new" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {newest.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
           </div>
         </section>
       )}
 
       {/* ── Fresh Groceries ──────────────────────────────────────────────────── */}
       {groceries.length > 0 && (
-        <section className="py-10" style={{ background: 'linear-gradient(135deg,#fffbeb,#fef3c7)' }}>
+        <section className="py-10 bg-amber-50 border-y border-amber-100">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-end justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -885,6 +784,62 @@ export default function HomepageClient({
         </section>
       )}
 
+      {/* ── Fashion Collection ───────────────────────────────────────────────── */}
+      {fashion.length > 0 && (
+        <section className="py-10 bg-pink-50 border-y border-pink-100">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-end justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <span className="w-1.5 h-7 rounded-full shrink-0 bg-pink-500" />
+                <div>
+                  <h2 className="text-xl font-extrabold text-gray-900">Fashion Collection</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">Ankara, office wear, footwear & accessories</p>
+                </div>
+              </div>
+              <Link href="/categories/fashion" className="text-sm font-semibold text-pink-600 hover:text-pink-700 flex items-center gap-1">
+                All Fashion →
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              {/* Sub-category links */}
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-pink-100 flex flex-col gap-2">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Browse by type</p>
+                {fashionSubcats.map(cat => (
+                  <Link key={cat.id} href={`/categories/${cat.slug}`}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-pink-50 transition-colors group">
+                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-base shrink-0 ${catLightClass(cat.slug)}`}>{catIcon(cat.slug)}</span>
+                    <span className="text-sm font-semibold text-gray-700 group-hover:text-pink-700">{cat.name}</span>
+                    <span className="ml-auto text-gray-300 text-xs group-hover:text-pink-400">→</span>
+                  </Link>
+                ))}
+                <Link href="/categories/fashion"
+                  className="mt-2 block text-center py-2.5 rounded-xl text-sm font-bold text-white bg-pink-500 hover:bg-pink-600 transition-colors">
+                  See All Fashion
+                </Link>
+              </div>
+
+              {/* Fashion products grid */}
+              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {fashion.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── New Arrivals ─────────────────────────────────────────────────────── */}
+      {newest.length > 0 && (
+        <section className="bg-white py-8 border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4">
+            <SectionHeader title="New Arrivals" sub="Just landed on Ecove" href="/search?sort=newest" label="See all new" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {newest.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── Verified Vendors ─────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 py-10">
         <SectionHeader title="Meet Our Verified Vendors" sub="Screened sellers with great reviews" href="/vendors" label="All vendors" />
@@ -910,7 +865,7 @@ export default function HomepageClient({
       </section>
 
       {/* ── Stats Bar ────────────────────────────────────────────────────────── */}
-      <div className="py-10" style={{ background: 'linear-gradient(135deg,#f68b1f,#d4720e)' }}>
+      <div className="py-10 bg-gradient-to-br from-[#f68b1f] to-[#d4720e]">
         <div className="max-w-7xl mx-auto px-4">
           <p className="text-center text-white/80 text-sm font-semibold uppercase tracking-widest mb-6">Why Nigerians Trust Ecove</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
@@ -938,7 +893,7 @@ export default function HomepageClient({
               <div className="text-yellow-400 text-lg mb-3">{'★'.repeat(rating)}</div>
               <p className="text-gray-600 text-sm leading-relaxed mb-4">"{text}"</p>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style={{ background: '#f68b1f' }}>
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 bg-[#f68b1f]">
                   {initials}
                 </div>
                 <div>
@@ -953,7 +908,7 @@ export default function HomepageClient({
 
       {/* ── Newsletter ───────────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 pb-10">
-        <div className="rounded-2xl p-8 text-center" style={{ background: 'linear-gradient(135deg,#1a1a2e,#16213e)' }}>
+        <div className="rounded-2xl p-8 text-center bg-gradient-to-br from-[#1a1a2e] to-[#16213e]">
           <p className="text-3xl mb-2">📬</p>
           <h3 className="text-xl font-extrabold text-white mb-1">Get the Best Deals First</h3>
           <p className="text-sm text-gray-400 mb-6">Subscribe for flash sale alerts, new arrivals and exclusive discounts</p>
@@ -966,8 +921,7 @@ export default function HomepageClient({
                 placeholder="Enter your email address"
                 className="flex-1 px-4 py-3 rounded-xl text-sm bg-white/10 text-white placeholder-gray-500 border border-white/10 outline-none focus:border-orange-400 transition-colors" />
               <button type="submit"
-                className="px-6 py-3 rounded-xl text-white text-sm font-bold hover:opacity-90 transition-opacity shrink-0"
-                style={{ background: '#f68b1f' }}>
+                className="px-6 py-3 rounded-xl text-white text-sm font-bold hover:opacity-90 transition-opacity shrink-0 bg-[#f68b1f]">
                 Subscribe
               </button>
             </form>
@@ -978,7 +932,7 @@ export default function HomepageClient({
       {/* ── Vendor CTA ───────────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 pb-10">
         <div className="relative rounded-2xl overflow-hidden">
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg,#f68b1f 0%,#d4720e 50%,#b85c09 100%)' }} />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f68b1f] via-[#d4720e] to-[#b85c09]" />
           {/* Decorative circles */}
           <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/10 rounded-full" />
           <div className="absolute -bottom-12 -left-12 w-44 h-44 bg-white/10 rounded-full" />
