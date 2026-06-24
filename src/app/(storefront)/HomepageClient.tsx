@@ -468,11 +468,12 @@ const TESTIMONIALS = [
 
 // ── Main Homepage Component ────────────────────────────────────────────────────
 export default function HomepageClient({
-  featured, categories, flashSale, bestSellers, newest, fashion, banners, vendorCount = 184, productCount = 200,
+  featured, categories, flashSale, bestSellers, newest, fashion, banners, vendorCount = 184, productCount = 200, groceries = [],
 }: {
   featured: Product[]; categories: Category[]; flashSale: Product[]
   bestSellers: Product[]; newest: Product[]; fashion: Product[]
   banners: Banner[]; vendorCount?: number; productCount?: number
+  groceries?: Product[]
 }) {
   // Top-level categories (no parent — all seeded cats are top-level)
   const topCats    = categories
@@ -520,9 +521,12 @@ export default function HomepageClient({
             </div>
             {categories.map(cat => (
               <Link key={cat.id} href={`/categories/${cat.slug}`}
-                className="group flex items-center gap-3 px-4 py-3 text-sm border-b border-gray-50 last:border-0 hover:bg-orange-50 transition-colors flex-1">
-                <span className="text-lg shrink-0 transition-transform group-hover:scale-110">{catIcon(cat.slug)}</span>
-                <span className="flex-1 font-medium text-gray-700 group-hover:text-orange-700">{cat.name}</span>
+                className="group flex items-center gap-3 px-4 py-2.5 text-sm border-b border-gray-50 last:border-0 hover:bg-orange-50 transition-colors flex-1">
+                <span className="w-8 h-8 rounded-lg flex items-center justify-center text-base shrink-0 group-hover:scale-110 transition-transform"
+                  style={{ background: catLight(cat.slug) }}>
+                  {catIcon(cat.slug)}
+                </span>
+                <span className="flex-1 font-semibold text-gray-700 group-hover:text-orange-700">{cat.name}</span>
                 <span className="text-gray-300 text-xs group-hover:text-orange-400 transition-colors">›</span>
               </Link>
             ))}
@@ -630,19 +634,29 @@ export default function HomepageClient({
 
       {/* ── Flash Sale ───────────────────────────────────────────────────────── */}
       {flashSale.length > 0 && (
-        <section className="py-8 bg-gray-900">
+        <section className="py-8" style={{ background: 'linear-gradient(135deg,#0d0d0d 0%,#1a0a00 50%,#2d1000 100%)' }}>
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between mb-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-xl animate-pulse">⚡</div>
-                <div>
-                  <h2 className="text-xl font-extrabold text-white">Flash Sale</h2>
-                  <p className="text-xs text-gray-400">Ends in</p>
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center text-2xl shadow-lg shadow-orange-500/40">⚡</div>
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping opacity-75" />
                 </div>
-                {flashSale[0]?.flashSaleEnd && <FlashCountdown end={flashSale[0].flashSaleEnd} />}
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-extrabold text-white tracking-tight">Flash Sale</h2>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-500 text-white uppercase tracking-wide">Live</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <p className="text-xs text-gray-400">Ends in</p>
+                    {flashSale[0]?.flashSaleEnd && <FlashCountdown end={flashSale[0].flashSaleEnd} />}
+                  </div>
+                </div>
               </div>
-              <Link href="/search?flashSale=true" className="text-sm font-semibold px-4 py-2 rounded-lg border border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white transition-colors">
-                All Deals →
+              <Link href="/search?flashSale=true"
+                className="self-start sm:self-auto text-sm font-bold px-5 py-2.5 rounded-xl border border-orange-500 text-orange-400 hover:bg-orange-500 hover:text-white transition-all">
+                See All Deals →
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -834,6 +848,66 @@ export default function HomepageClient({
           </div>
         </section>
       )}
+
+      {/* ── Fresh Groceries ──────────────────────────────────────────────────── */}
+      {groceries.length > 0 && (
+        <section className="py-10" style={{ background: 'linear-gradient(135deg,#fffbeb,#fef3c7)' }}>
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-end justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <span className="w-1.5 h-7 rounded-full shrink-0 bg-amber-500" />
+                <div>
+                  <h2 className="text-xl font-extrabold text-gray-900">Fresh Groceries</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">Rice, oil, noodles & pantry staples delivered nationwide</p>
+                </div>
+              </div>
+              <Link href="/categories/groceries" className="text-sm font-semibold text-amber-600 hover:text-amber-700 flex items-center gap-1">
+                Shop Groceries →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {groceries.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
+            </div>
+            <div className="mt-6 bg-white rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm border border-amber-100">
+              <div className="flex items-center gap-4">
+                <span className="text-4xl">🚚</span>
+                <div>
+                  <p className="font-extrabold text-gray-900">Same-Day Delivery Available</p>
+                  <p className="text-sm text-gray-500">Lagos and Abuja orders placed before 2pm delivered today</p>
+                </div>
+              </div>
+              <Link href="/categories/groceries"
+                className="shrink-0 px-7 py-3 rounded-xl font-bold text-white text-sm hover:opacity-90 transition-opacity bg-amber-500">
+                Order Now →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Verified Vendors ─────────────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 py-10">
+        <SectionHeader title="Meet Our Verified Vendors" sub="Screened sellers with great reviews" href="/vendors" label="All vendors" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {([
+            { name: 'TechVault NG',    desc: 'Phones, laptops & electronics',       icon: '💻', href: '/vendors/techvault-ng',    iconBg: 'bg-blue-50',    cta: 'text-blue-500'    },
+            { name: 'StyleZone NG',    desc: 'Fashion, Ankara & footwear',           icon: '👗', href: '/vendors/stylezone-ng',    iconBg: 'bg-pink-50',    cta: 'text-pink-500'    },
+            { name: 'ProServices Hub', desc: 'Web, design, repairs & groceries',     icon: '🛠️', href: '/vendors/proservices-hub', iconBg: 'bg-emerald-50', cta: 'text-emerald-600' },
+          ] as const).map(v => (
+            <Link key={v.name} href={v.href}
+              className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+              <span className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 ${v.iconBg}`}>
+                {v.icon}
+              </span>
+              <div>
+                <p className="font-extrabold text-gray-900">{v.name}</p>
+                <p className="text-sm text-gray-500 mt-0.5">{v.desc}</p>
+                <p className={`text-xs font-semibold mt-2 ${v.cta}`}>Browse store →</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* ── Stats Bar ────────────────────────────────────────────────────────── */}
       <div className="py-10" style={{ background: 'linear-gradient(135deg,#f68b1f,#d4720e)' }}>

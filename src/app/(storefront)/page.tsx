@@ -9,17 +9,18 @@ export const metadata: Metadata = {
 async function getData() {
   const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   try {
-    const [productsRes, categoriesRes, flashSaleRes, bestSellersRes, newestRes, fashionRes, bannersRes, statsRes] = await Promise.all([
-      fetch(`${base}/api/storefront/products?featured=true&limit=12`,         { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/categories?limit=20&includeChildren=true`,{ next: { revalidate: 600 } }),
-      fetch(`${base}/api/storefront/products?flashSale=true&limit=6`,         { next: { revalidate: 60  } }),
-      fetch(`${base}/api/storefront/products?bestSeller=true&limit=6`,        { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/products?sort=newest&limit=6`,            { next: { revalidate: 120 } }),
-      fetch(`${base}/api/storefront/products?parentCategory=fashion&limit=6`, { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/banners`,                                 { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/stats`,                                   { next: { revalidate: 600 } }),
+    const [productsRes, categoriesRes, flashSaleRes, bestSellersRes, newestRes, fashionRes, bannersRes, statsRes, groceriesRes] = await Promise.all([
+      fetch(`${base}/api/storefront/products?featured=true&limit=12`,          { next: { revalidate: 300 } }),
+      fetch(`${base}/api/storefront/categories?limit=20&includeChildren=true`, { next: { revalidate: 600 } }),
+      fetch(`${base}/api/storefront/products?flashSale=true&limit=6`,          { next: { revalidate: 60  } }),
+      fetch(`${base}/api/storefront/products?bestSeller=true&limit=6`,         { next: { revalidate: 300 } }),
+      fetch(`${base}/api/storefront/products?sort=newest&limit=6`,             { next: { revalidate: 120 } }),
+      fetch(`${base}/api/storefront/products?parentCategory=fashion&limit=6`,  { next: { revalidate: 300 } }),
+      fetch(`${base}/api/storefront/banners`,                                  { next: { revalidate: 300 } }),
+      fetch(`${base}/api/storefront/stats`,                                    { next: { revalidate: 600 } }),
+      fetch(`${base}/api/storefront/products?parentCategory=groceries&limit=6`,{ next: { revalidate: 300 } }),
     ])
-    const [featuredData, categoriesData, flashSaleData, bestSellersData, newestData, fashionData, bannersData, statsData] = await Promise.all([
+    const [featuredData, categoriesData, flashSaleData, bestSellersData, newestData, fashionData, bannersData, statsData, groceriesData] = await Promise.all([
       productsRes.ok     ? productsRes.json()     : { data: [] },
       categoriesRes.ok   ? categoriesRes.json()   : { data: [] },
       flashSaleRes.ok    ? flashSaleRes.json()    : { data: [] },
@@ -28,6 +29,7 @@ async function getData() {
       fashionRes.ok      ? fashionRes.json()       : { data: [] },
       bannersRes.ok      ? bannersRes.json()       : { data: [] },
       statsRes.ok        ? statsRes.json()         : { vendorCount: 184, productCount: 200 },
+      groceriesRes.ok    ? groceriesRes.json()     : { data: [] },
     ])
     return {
       featured:     featuredData.data    || [],
@@ -39,17 +41,19 @@ async function getData() {
       banners:      bannersData.data     || [],
       vendorCount:  statsData.vendorCount  || 184,
       productCount: statsData.productCount || 200,
+      groceries:    groceriesData.data   || [],
     }
   } catch {
     return {
       featured: [], categories: [], flashSale: [], bestSellers: [],
       newest: [], fashion: [], banners: [], vendorCount: 184, productCount: 200,
+      groceries: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { featured, categories, flashSale, bestSellers, newest, fashion, banners, vendorCount, productCount } = await getData()
+  const { featured, categories, flashSale, bestSellers, newest, fashion, banners, vendorCount, productCount, groceries } = await getData()
   return (
     <HomepageClient
       featured={featured}
@@ -61,6 +65,7 @@ export default async function HomePage() {
       banners={banners}
       vendorCount={vendorCount}
       productCount={productCount}
+      groceries={groceries}
     />
   )
 }

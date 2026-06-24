@@ -130,7 +130,7 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-4xl animate-pulse" style={{ color: '#f68b1f' }}>ecove</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><img src="/images/ecove-logo.png" alt="Ecove" width={72} height={72} className="animate-pulse" /></div>}>
       <LoginContent />
     </Suspense>
   )

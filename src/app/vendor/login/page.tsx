@@ -116,5 +116,5 @@ function VendorLoginContent() {
 
 
 export default function VendorLoginPage() {
-  return <Suspense fallback={<div className="min-h-screen bg-gray-900 flex items-center justify-center"><div className="text-white text-2xl font-extrabold animate-pulse">ecove</div></div>}><VendorLoginContent /></Suspense>
+  return <Suspense fallback={<div className="min-h-screen bg-gray-900 flex items-center justify-center"><img src="/images/ecove-logo.png" alt="Ecove" width={64} height={64} className="animate-pulse" /></div>}><VendorLoginContent /></Suspense>
 }
