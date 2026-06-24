@@ -16,7 +16,7 @@ export async function register() {
 
   const missing = REQUIRED.filter(k => !process.env[k])
   if (missing.length > 0) {
-    throw new Error(
+    console.error(
       `\n\nEcove: missing required environment variables:\n  ${missing.join('\n  ')}\n\nSet them in .env.local (dev) or your hosting provider (production).\n`
     )
   }

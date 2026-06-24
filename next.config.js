@@ -2,7 +2,6 @@ const { withSentryConfig } = require('@sentry/nextjs')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   images: {
     formats: ['image/avif', 'image/webp'],
     // 185 added so Next.js generates an exact 185px variant for the banner cards
