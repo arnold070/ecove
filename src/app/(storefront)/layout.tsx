@@ -81,7 +81,7 @@ function Header() {
 
         {/* ──── MOBILE layout (< md): single row ──────────────────── */}
         <div className="md:hidden border-b border-gray-100">
-          <div className="flex items-center px-3 py-2.5 gap-2">
+          <div className="flex items-center px-3 py-2 gap-2">
 
             {/* Hamburger */}
             <button
@@ -102,9 +102,9 @@ function Header() {
               <Image
                 src="/images/ecove-logo.png"
                 alt="Ecove.com.ng"
-                width={120}
-                height={48}
-                className="h-9 w-auto object-contain"
+                width={160}
+                height={64}
+                className="h-12 w-auto object-contain"
                 priority
               />
             </Link>
@@ -135,9 +135,9 @@ function Header() {
               <Image
                 src="/images/ecove-logo.png"
                 alt="Ecove.com.ng"
-                width={220}
-                height={88}
-                className="h-14 lg:h-20 w-auto object-contain"
+                width={280}
+                height={112}
+                className="h-16 lg:h-24 w-auto object-contain"
                 priority
               />
             </Link>
