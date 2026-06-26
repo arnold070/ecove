@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useAuth } from '@/context/AuthContext'
 import { useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
+import axios from 'axios'
 
 const schema = z.object({
   email:    z.string().email('Enter a valid email'),
@@ -16,33 +17,58 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 function LoginContent() {
-  const { login }        = useAuth()
-  const [busy, setBusy]  = useState(false)
-  const searchParams     = useSearchParams()
-  const registered       = searchParams.get('registered') === '1'
-  const verified         = searchParams.get('verified') === '1'
-  const reason           = searchParams.get('reason')
+  const { login }                             = useAuth()
+  const [busy, setBusy]                       = useState(false)
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null)
+  const [resendBusy, setResendBusy]           = useState(false)
+  const [resendDone, setResendDone]           = useState(false)
+  const searchParams                          = useSearchParams()
+  const registered                            = searchParams.get('registered') === '1'
+  const verified                              = searchParams.get('verified') === '1'
+  const reason                                = searchParams.get('reason')
 
-  const bannerMessages: Record<string, { msg: string; type: 'success' | 'info' | 'warn' }> = {
-    admin_only:      { msg: 'Admin access only. Please sign in with an admin account.', type: 'warn' },
-    vendor_only:     { msg: 'Vendor dashboard access only. Please sign in as a vendor.', type: 'warn' },
-    session_expired: { msg: 'Your session expired. Please sign in again.', type: 'warn' },
+  const bannerMessages: Record<string, { msg: string; warn: boolean }> = {
+    admin_only:      { msg: 'Admin access only. Please sign in with an admin account.', warn: true },
+    vendor_only:     { msg: 'Vendor dashboard access only. Please sign in as a vendor.', warn: true },
+    session_expired: { msg: 'Your session expired. Please sign in again.', warn: true },
   }
   const banner = reason ? bannerMessages[reason] : null
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 
   const onSubmit = async (data: FormData) => {
     setBusy(true)
+    setUnverifiedEmail(null)
     try {
       await login(data.email, data.password)
       toast.success('Welcome back!')
     } catch (err: any) {
-      // error shown by axios interceptor
+      const code = err?.response?.data?.code
+      if (code === 'EMAIL_NOT_VERIFIED') {
+        setUnverifiedEmail(data.email)
+      } else {
+        const msg = err?.response?.data?.error || 'Invalid email or password.'
+        toast.error(msg)
+      }
     } finally {
       setBusy(false)
+    }
+  }
+
+  const handleResend = async () => {
+    const email = unverifiedEmail || getValues('email')
+    if (!email) return
+    setResendBusy(true)
+    try {
+      await axios.post('/api/auth/verify-email/resend-public', { email })
+      setResendDone(true)
+      toast.success('Verification email sent! Check your inbox.')
+    } catch {
+      toast.error('Could not send verification email. Please try again.')
+    } finally {
+      setResendBusy(false)
     }
   }
 
@@ -61,20 +87,44 @@ function LoginContent() {
         </div>
 
         {registered && (
-          <div className="mb-4 p-4 rounded-xl text-sm font-medium" style={{ background: '#e8f7ef', color: '#1e8a44' }}>
+          <div className="mb-4 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-700">
             ✅ Account created! Check your email to verify before signing in.
           </div>
         )}
         {verified && (
-          <div className="mb-4 p-4 rounded-xl text-sm font-medium" style={{ background: '#e8f7ef', color: '#1e8a44' }}>
+          <div className="mb-4 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-700">
             ✅ Email verified! You can now sign in.
           </div>
         )}
         {banner && (
-          <div className="mb-4 p-4 rounded-xl text-sm font-medium" style={{ background: banner.type === 'warn' ? '#fef3c7' : '#dbeafe', color: banner.type === 'warn' ? '#92400e' : '#1e40af' }}>
+          <div className={`mb-4 p-4 rounded-xl text-sm font-medium ${banner.warn ? 'bg-amber-50 text-amber-800' : 'bg-blue-50 text-blue-800'}`}>
             ⚠️ {banner.msg}
           </div>
         )}
+
+        {/* Email not verified state */}
+        {unverifiedEmail && (
+          <div className="mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50">
+            <p className="text-sm font-semibold text-amber-800 mb-1">📧 Email not verified</p>
+            <p className="text-sm text-amber-700 mb-3">
+              Please verify your email address before signing in. Check your inbox for the link we sent to{' '}
+              <span className="font-semibold">{unverifiedEmail}</span>.
+            </p>
+            {resendDone ? (
+              <p className="text-sm font-medium text-green-700">✅ Verification email resent — check your inbox.</p>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={resendBusy}
+                className="text-sm font-semibold text-orange-600 hover:text-orange-700 underline disabled:opacity-50"
+              >
+                {resendBusy ? 'Sending…' : "Didn't get the email? Resend verification link"}
+              </button>
+            )}
+          </div>
+        )}
+
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
@@ -105,8 +155,7 @@ function LoginContent() {
             <button
               type="submit"
               disabled={busy}
-              className="w-full py-3 rounded-xl font-bold text-white text-sm transition-all"
-              style={{ background: busy ? '#d1d5db' : '#f68b1f' }}
+              className={`w-full py-3 rounded-xl font-bold text-white text-sm transition-all ${busy ? 'bg-gray-300' : 'bg-[#f68b1f] hover:bg-[#d4720e]'}`}
             >
               {busy ? 'Signing in…' : 'Sign In'}
             </button>

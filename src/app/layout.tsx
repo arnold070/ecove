@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Plus_Jakarta_Sans, Sora } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import { QueryProvider } from '@/context/QueryProvider'
@@ -9,6 +9,12 @@ const sans = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-sans', di
 const display = Sora({ subsets: ['latin'], variable: '--font-display', display: 'swap', weight: ['700','800'] })
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://ecove.com.ng'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+}
 
 export const metadata: Metadata = {
   title: {

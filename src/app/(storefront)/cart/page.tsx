@@ -21,7 +21,18 @@ export default function CartPage() {
   const total = subtotal + shipping
 
   return (
-    <div className="relative max-w-5xl mx-auto px-4 py-8">
+    <div className="relative max-w-5xl mx-auto px-4 pt-8 pb-36 lg:pb-8">
+      {/* Mobile sticky checkout bar — sits above the fixed bottom nav */}
+      <div className="fixed bottom-above-nav left-0 right-0 z-40 lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Total</p>
+          <p className="text-lg font-extrabold text-orange-600">₦{total.toLocaleString()}</p>
+        </div>
+        <Link href="/checkout" className="flex-1 max-w-[200px] py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm text-center transition-colors">
+          Checkout →
+        </Link>
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-extrabold text-gray-900">Shopping Cart <span className="text-gray-400 font-normal text-lg">({totalItems()} items)</span></h1>
         <button type="button" onClick={clearCart} className="text-sm text-red-400 hover:text-red-600 font-medium">Clear cart</button>

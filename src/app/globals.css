@@ -27,3 +27,23 @@
 
 /* Dynamic background via CSS custom property — used where background comes from DB/user input */
 .dynamic-bg { background: var(--dynamic-bg, #f68b1f); }
+
+/*
+ * Safe-area utilities for Android gesture navigation and iOS home indicator.
+ * Requires viewport-fit=cover in the <Viewport> export (root layout.tsx).
+ *
+ * pb-nav-safe   — main content bottom padding (clears nav bar + gesture bar)
+ * bottom-above-nav — sticky action bars that sit just above the bottom nav
+ * pb-safe-bottom   — bottom nav itself, so its bg extends into the gesture strip
+ */
+@layer utilities {
+  .pb-nav-safe {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+  .bottom-above-nav {
+    bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+  .pb-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}

@@ -280,7 +280,7 @@ function HeroSlider({ slides }: { slides: Slide[] }) {
   const s = slides[idx]
 
   return (
-    <div className="lg:col-span-2 relative rounded-2xl overflow-hidden shadow-xl" style={{ height: '360px' }}>
+    <div className="lg:col-span-2 relative rounded-2xl overflow-hidden shadow-xl h-[260px] sm:h-[320px] lg:h-[360px]">
 
       {/* Slides */}
       {slides.map((slide, i) => {
@@ -563,6 +563,29 @@ export default function HomepageClient({
         </div>
       </div>
 
+      {/* ── Mobile: promo mini-cards (replaces the hidden right panel) ─────── */}
+      <div className="lg:hidden overflow-x-auto scrollbar-hide px-4 py-3 bg-gray-50">
+        <div className="flex gap-3">
+          {[
+            { title: 'Flash Sale',      sub: 'Up to 60% off today',   href: '/search?flashSale=true',  bg: 'linear-gradient(135deg,#7f0000,#dc2626)', emoji: '⚡' },
+            { title: 'Best Sellers',    sub: 'Most loved products',    href: '/search?bestSeller=true', bg: 'linear-gradient(135deg,#1e3a8a,#3b82f6)', emoji: '🏆' },
+            { title: 'Fresh Groceries', sub: 'Delivered to your door', href: '/categories/groceries',   bg: 'linear-gradient(135deg,#78350f,#d97706)', emoji: '🛒' },
+            { title: 'Shop Fashion',    sub: 'Trending styles',        href: '/categories/fashion',     bg: 'linear-gradient(135deg,#4a1078,#9333ea)', emoji: '👗' },
+            { title: 'New Arrivals',    sub: 'Just landed on Ecove',   href: '/search?sort=newest',     bg: 'linear-gradient(135deg,#065f46,#10b981)', emoji: '🌟' },
+          ].map(card => (
+            <Link key={card.title} href={card.href}
+              className="shrink-0 w-36 h-[88px] rounded-xl p-3 text-white flex flex-col justify-between shadow-sm hover:scale-[1.02] transition-transform"
+              style={{ background: card.bg }}>
+              <span className="text-2xl leading-none">{card.emoji}</span>
+              <div>
+                <p className="font-extrabold text-sm leading-tight">{card.title}</p>
+                <p className="text-[10px] opacity-75 mt-0.5 leading-tight">{card.sub}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {/* ── Mobile Category Bar (hidden on lg where sidebar shows) ─────────── */}
       <div className="lg:hidden bg-white border-b border-gray-100">
         <div className="flex gap-3 overflow-x-auto px-4 py-3 scrollbar-hide">
@@ -692,7 +715,16 @@ export default function HomepageClient({
           <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10" style={{ background: 'linear-gradient(to right,white,transparent)' }} />
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10" style={{ background: 'linear-gradient(to left,white,transparent)' }} />
 
-          <div className="grid grid-cols-4 lg:grid-cols-7 gap-3 max-w-7xl mx-auto px-4">
+            {/* Mobile: horizontal scroll — each card ~120px wide so ~3 are visible */}
+          <div className="lg:hidden flex gap-3 overflow-x-auto scrollbar-hide px-4">
+            {PROMO_BANNERS.map((b, i) => (
+              <div key={b.theme} className="shrink-0 w-[118px]">
+                <PromoBannerCard b={b} priority={i < 4} />
+              </div>
+            ))}
+          </div>
+          {/* Desktop: 7-col grid */}
+          <div className="hidden lg:grid lg:grid-cols-7 gap-3 max-w-7xl mx-auto px-4">
             {PROMO_BANNERS.map((b, i) => (
               <PromoBannerCard key={b.theme} b={b} priority={i < 5} />
             ))}
@@ -702,7 +734,7 @@ export default function HomepageClient({
 
       {/* ── Promo Banner Strip ───────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {[
             { bg: 'linear-gradient(135deg,#c0392b,#e74c3c)', icon: '📱', title: 'New Phones Arrived', sub: 'iPhones, Samsung & more', href: '/categories/phones-tablets', cta: 'Shop now →' },
             { bg: 'linear-gradient(135deg,#1d4ed8,#3b82f6)', icon: '💻', title: 'Work From Anywhere', sub: 'Laptops for every budget', href: '/categories/computing', cta: 'Shop now →' },
@@ -711,13 +743,13 @@ export default function HomepageClient({
             { bg: 'linear-gradient(135deg,#78350f,#d97706)', icon: '🛒', title: 'Fresh Groceries', sub: 'Delivered to your door', href: '/categories/groceries', cta: 'Shop now →' },
           ].map(({ bg, icon, title, sub, href, cta }) => (
             <Link key={href} href={href}
-              className="flex items-center gap-4 p-5 rounded-2xl text-white hover:scale-[1.02] transition-transform shadow-sm"
+              className="flex items-center gap-2 sm:gap-4 p-3 sm:p-5 rounded-2xl text-white hover:scale-[1.02] transition-transform shadow-sm"
               style={{ background: bg }}>
-              <span className="text-4xl">{icon}</span>
-              <div>
-                <p className="font-extrabold text-base">{title}</p>
-                <p className="text-sm opacity-75">{sub}</p>
-                <p className="text-xs font-semibold mt-1 opacity-90">{cta}</p>
+              <span className="text-2xl sm:text-4xl shrink-0">{icon}</span>
+              <div className="min-w-0">
+                <p className="font-extrabold text-xs sm:text-base leading-tight truncate">{title}</p>
+                <p className="text-[10px] sm:text-sm opacity-75 hidden sm:block">{sub}</p>
+                <p className="text-[10px] sm:text-xs font-semibold mt-0.5 sm:mt-1 opacity-90">{cta}</p>
               </div>
             </Link>
           ))}
@@ -802,8 +834,8 @@ export default function HomepageClient({
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-              {/* Sub-category links */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-pink-100 flex flex-col gap-2">
+              {/* Sub-category sidebar — desktop only */}
+              <div className="hidden lg:flex flex-col gap-2 bg-white rounded-2xl p-4 shadow-sm border border-pink-100">
                 <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Browse by type</p>
                 {fashionSubcats.map(cat => (
                   <Link key={cat.id} href={`/categories/${cat.slug}`}
@@ -819,11 +851,31 @@ export default function HomepageClient({
                 </Link>
               </div>
 
-              {/* Fashion products grid */}
+              {/* Fashion products — full-width on mobile, 3/4 on desktop */}
               <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {fashion.slice(0, 6).map(p => <ProductCard key={p.id} p={p} />)}
               </div>
             </div>
+
+            {/* Mobile: sub-category horizontal scroll strip */}
+            {fashionSubcats.length > 0 && (
+              <div className="lg:hidden mt-4 flex gap-3 overflow-x-auto scrollbar-hide pb-1">
+                {fashionSubcats.map(cat => (
+                  <Link key={cat.id} href={`/categories/${cat.slug}`}
+                    className="shrink-0 flex flex-col items-center gap-1.5 w-16 group">
+                    <span className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform ${catLightClass(cat.slug)}`}>
+                      {catIcon(cat.slug)}
+                    </span>
+                    <span className="text-[10px] font-semibold text-gray-600 text-center leading-tight line-clamp-2">{cat.name}</span>
+                  </Link>
+                ))}
+                <Link href="/categories/fashion"
+                  className="shrink-0 flex flex-col items-center gap-1.5 w-16">
+                  <span className="w-12 h-12 rounded-2xl bg-pink-500 flex items-center justify-center text-white text-xs font-extrabold">All</span>
+                  <span className="text-[10px] font-semibold text-pink-600 text-center leading-tight">See All</span>
+                </Link>
+              </div>
+            )}
           </div>
         </section>
       )}

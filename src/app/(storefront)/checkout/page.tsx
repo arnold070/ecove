@@ -91,10 +91,22 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="relative max-w-5xl mx-auto px-4 py-8">
+    <div className="relative max-w-5xl mx-auto px-4 pt-8 pb-36 lg:pb-8">
       <h1 className="text-2xl font-extrabold mb-6">Checkout</h1>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Mobile sticky pay bar — sits above the fixed bottom nav */}
+      <div className="fixed bottom-above-nav left-0 right-0 z-40 lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Total</p>
+          <p className="text-lg font-extrabold text-orange-600">₦{total.toLocaleString()}</p>
+        </div>
+        <button type="submit" form="checkout-form" disabled={loading}
+          className="flex-1 max-w-[200px] py-3 rounded-xl text-white font-bold text-sm disabled:opacity-60 bg-orange-500">
+          {loading ? 'Processing…' : 'Pay Now →'}
+        </button>
+      </div>
+
+      <form id="checkout-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Form */}
           <div className="lg:col-span-2 space-y-6">

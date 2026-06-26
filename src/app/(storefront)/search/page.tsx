@@ -32,7 +32,7 @@ function ProductCard({ p, addItem }: { p: any; addItem: (item: any) => void }) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group flex flex-col">
       <Link href={`/products/${p.slug}`} className="relative block">
-        <div className="h-48 bg-gray-50 relative flex items-center justify-center overflow-hidden">
+        <div className="h-36 sm:h-48 bg-gray-50 relative flex items-center justify-center overflow-hidden">
           {p.images?.[0]?.url
             ? <Image src={p.images[0].url} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="220px" />
             : <span className="text-5xl">{CATEGORY_ICONS[p.category?.slug] || '📦'}</span>}

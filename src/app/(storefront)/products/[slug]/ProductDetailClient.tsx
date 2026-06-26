@@ -200,7 +200,7 @@ export default function ProductDetailClient({ product, related = [] }: { product
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 pt-8 pb-36 lg:pb-8">
 
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="text-xs text-gray-400 mb-6 flex items-center gap-1.5 flex-wrap">
@@ -212,8 +212,28 @@ export default function ProductDetailClient({ product, related = [] }: { product
         <span className="text-gray-600 truncate max-w-xs">{product.name}</span>
       </nav>
 
+      {/* Mobile sticky buy bar — sits above the fixed bottom nav */}
+      <div className="fixed bottom-above-nav left-0 right-0 z-40 lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-3 flex items-center gap-3">
+        <div className="flex-1 min-w-0">
+          <p className="text-[10px] text-gray-500 truncate">{product.name}</p>
+          <p className="text-base font-extrabold text-orange-600">₦{price.toLocaleString()}</p>
+        </div>
+        <button type="button"
+          onClick={() => addToCart(false)}
+          disabled={!inStock}
+          className="py-2.5 px-5 rounded-xl border-2 border-orange-500 text-orange-600 font-extrabold text-sm disabled:opacity-40 transition-colors shrink-0">
+          🛒 Cart
+        </button>
+        <button type="button"
+          onClick={() => addToCart(true)}
+          disabled={!inStock}
+          className="py-2.5 px-5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-sm disabled:opacity-40 transition-colors shrink-0">
+          Buy Now →
+        </button>
+      </div>
+
       {/* Main grid */}
-      <div className="grid lg:grid-cols-2 gap-10 mb-8">
+      <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 mb-8">
 
         {/* ── Image gallery ──────────────────────────────────────── */}
         <div>

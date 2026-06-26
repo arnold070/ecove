@@ -6,6 +6,12 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    // Bottom nav — must always be in the build regardless of scanning
+    'bg-[#0f1929]',
+    'z-[100]',
+    'z-[200]',
+  ],
   theme: {
     extend: {
       colors: {

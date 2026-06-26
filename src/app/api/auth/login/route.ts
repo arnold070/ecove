@@ -38,6 +38,12 @@ export async function POST(req: NextRequest) {
       return apiError('Invalid email or password.', 401)
     }
     if (!user.isActive) return apiError('Your account has been deactivated.', 403)
+    if (!user.isEmailVerified) {
+      return NextResponse.json(
+        { success: false, error: 'Please verify your email address before signing in. Check your inbox for the verification link.', code: 'EMAIL_NOT_VERIFIED' },
+        { status: 403 }
+      )
+    }
 
     // Vendor status check
     if (user.role === 'vendor') {
