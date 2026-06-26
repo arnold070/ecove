@@ -21,14 +21,20 @@ function Header() {
   const { user, logout } = useAuth()
   const [query,       setQuery]       = useState('')
   const [menuOpen,    setMenuOpen]    = useState(false)
+  const [searchOpen,  setSearchOpen]  = useState(false)
   const [suggestions, setSuggestions] = useState<{ products: any[]; categories: any[] } | null>(null)
   const [suggestOpen, setSuggestOpen] = useState(false)
-  const suggestRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const suggestRef    = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const router   = useRouter()
   const pathname = usePathname()
   const cartRef  = useRef<HTMLDivElement>(null)
 
-  useEffect(() => { setMenuOpen(false) }, [pathname])
+  useEffect(() => { setMenuOpen(false); setSearchOpen(false) }, [pathname])
+
+  useEffect(() => {
+    if (searchOpen) setTimeout(() => searchInputRef.current?.focus(), 80)
+  }, [searchOpen])
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -38,10 +44,16 @@ function Header() {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [isOpen, toggleCart])
 
+  const closeSearch = () => { setSearchOpen(false); setQuery(''); setSuggestOpen(false) }
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     setSuggestOpen(false)
-    if (query.trim()) { router.push(`/search?q=${encodeURIComponent(query.trim())}`); setMenuOpen(false) }
+    if (query.trim()) {
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`)
+      setMenuOpen(false)
+      closeSearch()
+    }
   }
 
   const handleQueryChange = (val: string) => {
@@ -108,6 +120,19 @@ function Header() {
                 priority
               />
             </Link>
+
+            {/* Search icon — opens full-screen overlay */}
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-orange-500 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
+              aria-label="Search"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="16.5" y1="16.5" x2="22" y2="22" />
+              </svg>
+            </button>
 
             {/* Cart → navigates to /cart on mobile */}
             <Link
@@ -363,6 +388,108 @@ function Header() {
         </div>
 
       </header>
+
+      {/* ── Mobile full-screen search overlay ───────────────────────── */}
+      {searchOpen && (
+        <div className="md:hidden fixed inset-0 z-[200] bg-white flex flex-col animate-fade-in">
+
+          {/* Input row */}
+          <div className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 shrink-0">
+            <form onSubmit={handleSearch} role="search"
+              className="flex-1 flex rounded-xl overflow-hidden border-2 border-orange-400 focus-within:border-orange-500 transition-colors">
+              <label htmlFor="mobile-search-overlay" className="sr-only">Search products</label>
+              <input
+                ref={searchInputRef}
+                id="mobile-search-overlay"
+                type="text"
+                value={query}
+                onChange={e => handleQueryChange(e.target.value)}
+                onBlur={() => setTimeout(() => setSuggestOpen(false), 150)}
+                onFocus={() => query.length >= 2 && setSuggestOpen(true)}
+                placeholder="Search products, brands, categories…"
+                autoComplete="off"
+                className="flex-1 px-4 py-2.5 text-sm text-gray-800 outline-none bg-white"
+              />
+              <button type="submit" className="px-4 bg-orange-500 text-white text-sm font-bold hover:bg-orange-600 transition-colors" aria-label="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                  <circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="22" y2="22" />
+                </svg>
+              </button>
+            </form>
+            <button type="button" onClick={closeSearch}
+              className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-800 text-lg shrink-0 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-label="Close search">
+              ✕
+            </button>
+          </div>
+
+          {/* Results / empty state */}
+          <div className="flex-1 overflow-y-auto">
+            {suggestOpen && suggestions && (suggestions.products?.length > 0 || suggestions.categories?.length > 0) ? (
+              <div className="pb-6">
+                {suggestions.categories?.length > 0 && (
+                  <div className="px-4 pt-4 pb-2">
+                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wide mb-2">Categories</p>
+                    {suggestions.categories.map((cat: any) => (
+                      <button type="button" key={cat.id}
+                        onMouseDown={() => { router.push(`/categories/${cat.slug}`); closeSearch() }}
+                        className="w-full flex items-center gap-3 px-3 py-3 text-sm rounded-xl hover:bg-orange-50 text-left transition-colors">
+                        <span className="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center text-base shrink-0">🗂️</span>
+                        <span className="font-medium text-gray-700">{cat.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {suggestions.products?.length > 0 && (
+                  <div className="px-4 pt-2 pb-2">
+                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wide mb-2">Products</p>
+                    {suggestions.products.map((p: any) => (
+                      <button type="button" key={p.id}
+                        onMouseDown={() => { router.push(`/products/${p.slug}`); closeSearch() }}
+                        className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-orange-50 text-left transition-colors">
+                        <div className="w-12 h-12 bg-gray-100 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
+                          {p.images?.[0]?.url
+                            ? <img src={p.images[0].url} alt="" className="w-full h-full object-cover" />
+                            : <span className="text-xl">📦</span>}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-gray-800 text-sm truncate">{p.name}</p>
+                          <p className="text-orange-500 font-bold text-sm mt-0.5">₦{parseFloat(p.price).toLocaleString()}</p>
+                        </div>
+                      </button>
+                    ))}
+                    <button type="button"
+                      onMouseDown={() => { router.push(`/search?q=${encodeURIComponent(query)}`); closeSearch() }}
+                      className="w-full mt-2 py-3 text-sm font-semibold text-orange-500 hover:bg-orange-50 rounded-xl transition-colors border border-orange-200">
+                      See all results for &ldquo;{query}&rdquo; →
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : query.length >= 2 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
+                <span className="text-5xl">🔍</span>
+                <p className="text-sm">No results for &ldquo;{query}&rdquo;</p>
+                <p className="text-xs">Try a different search term</p>
+              </div>
+            ) : (
+              <div className="px-4 pt-6">
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-wide mb-3">Quick browse</p>
+                <div className="flex flex-wrap gap-2">
+                  {['Phones', 'Laptops', 'Fashion', 'Electronics', 'Services', 'Home & Kitchen'].map(term => (
+                    <button key={term} type="button"
+                      onClick={() => { setQuery(term); handleQueryChange(term) }}
+                      className="px-4 py-2 rounded-full bg-gray-100 text-sm font-medium text-gray-700 hover:bg-orange-100 hover:text-orange-600 transition-colors">
+                      {term}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
+      )}
 
       {/* ── Mobile slide-in drawer ────────────────────────────────────── */}
       <div id="mobile-nav" className={`md:hidden fixed inset-0 z-40 transition-all duration-200 ${menuOpen ? 'visible' : 'invisible'}`}
