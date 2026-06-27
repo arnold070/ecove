@@ -142,8 +142,7 @@ export default function ContactClient() {
                 <h3 className="font-extrabold text-white text-lg mb-2">Our Headquarters</h3>
                 <p className="text-white/70 text-sm leading-relaxed">
                   Ecove Marketplace Ltd<br />
-                  14 Akin Adesola Street<br />
-                  Victoria Island, Lagos<br />
+                  Asaba, Delta State<br />
                   Nigeria
                 </p>
                 <span className="inline-block mt-4 text-xs font-extrabold text-orange-400 bg-orange-400/10 border border-orange-400/20 px-3 py-1.5 rounded-lg">

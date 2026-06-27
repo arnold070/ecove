@@ -264,7 +264,7 @@ export default function AboutClient() {
             {[
               { icon: '✉️', label: 'Email Us',        value: 'hello@ecove.com.ng',         href: 'mailto:hello@ecove.com.ng', badge: null },
               { icon: '📞', label: 'Call Support',    value: '+234 800 ECOVE (32683)',      href: 'tel:+2348003268300',        badge: null },
-              { icon: '📍', label: 'Headquarters',    value: 'Victoria Island, Lagos',     href: null,                        badge: 'MAP' },
+              { icon: '📍', label: 'Headquarters',    value: 'Asaba, Delta State, Nigeria', href: null,                        badge: 'MAP' },
             ].map(({ icon, label, value, href, badge }) => (
               <div key={label}
                 className="flex items-center justify-between p-5 rounded-2xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/30 transition-all group cursor-pointer">
