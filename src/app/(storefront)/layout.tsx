@@ -101,7 +101,7 @@ function Header() {
               onClick={() => setMenuOpen(o => !o)}
               className="flex flex-col justify-center items-center w-10 h-10 gap-1.5 shrink-0 rounded-lg hover:bg-gray-100 transition-colors"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={menuOpen}
+              aria-expanded={menuOpen ? 'true' : 'false'}
               aria-controls="mobile-nav"
             >
               <span className={`block h-0.5 w-5 bg-gray-700 rounded transition-all duration-200 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
@@ -296,7 +296,7 @@ function Header() {
                   type="button"
                   onClick={toggleCart}
                   aria-label={`Cart${totalItems() > 0 ? ` (${totalItems()})` : ''}`}
-                  aria-expanded={isOpen}
+                  aria-expanded={isOpen ? 'true' : 'false'}
                   aria-controls="cart-drawer"
                   className="flex flex-col items-center px-3 py-1 text-gray-600 hover:text-orange-500 rounded-lg transition-colors relative"
                 >
@@ -526,6 +526,14 @@ function Header() {
             )}
           </div>
 
+          {/* Sell on Ecove */}
+          <div className="px-4 py-3 border-b border-orange-100 bg-orange-50 shrink-0">
+            <Link href="/vendor/register" onClick={() => setMenuOpen(false)}
+              className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-bold text-white rounded-xl bg-orange-500 hover:bg-orange-600 transition-colors">
+              🏪 Sell on Ecove
+            </Link>
+          </div>
+
           {/* Search */}
           <div className="px-4 py-3 border-b border-gray-100 shrink-0">
             <form onSubmit={handleSearch} role="search" className="flex rounded-lg overflow-hidden border border-gray-200 focus-within:border-orange-400 transition-colors">
@@ -574,18 +582,14 @@ function Header() {
           </nav>
 
           {/* Bottom */}
-          <div className="px-4 py-4 border-t border-gray-100 shrink-0 space-y-2">
-            <Link href="/vendor/register" onClick={() => setMenuOpen(false)}
-              className="block w-full py-3 text-center text-sm font-bold text-white rounded-xl bg-orange-500 hover:bg-orange-600 transition-colors">
-              🏪 Sell on Ecove
-            </Link>
-            {user && (
+          {user && (
+            <div className="px-4 py-3 border-t border-gray-100 shrink-0">
               <button type="button" onClick={() => { logout(); setMenuOpen(false) }}
                 className="block w-full py-2.5 text-center text-sm text-red-400 hover:text-red-600 font-medium">
                 Sign Out
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </>
