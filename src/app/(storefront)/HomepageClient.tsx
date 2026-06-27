@@ -916,26 +916,6 @@ export default function HomepageClient({
         </div>
       </section>
 
-      {/* ── Stats Bar ────────────────────────────────────────────────────────── */}
-      <div className="py-10 bg-gradient-to-br from-[#f68b1f] to-[#d4720e]">
-        <div className="max-w-7xl mx-auto px-4">
-          <p className="text-center text-white/80 text-sm font-semibold uppercase tracking-widest mb-6">Why Nigerians Trust Ecove</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
-            {[
-              { value: `${productCount}+`, label: 'Products Listed' },
-              { value: `${vendorCount}+`, label: 'Verified Vendors' },
-              { value: '36', label: 'States Covered' },
-              { value: '100%', label: 'Secure Checkout' },
-            ].map(({ value, label }) => (
-              <div key={label} className="flex flex-col items-center">
-                <span className="text-4xl font-extrabold tracking-tight">{value}</span>
-                <span className="text-sm text-white/75 mt-1">{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* ── Testimonials ─────────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 py-10">
         <SectionHeader title="What Our Customers Say" sub="Real reviews from real Nigerians" />
