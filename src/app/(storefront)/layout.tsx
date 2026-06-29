@@ -661,7 +661,7 @@ function BottomNav() {
 
   return (
     <nav
-      className="block fixed bottom-0 left-0 right-0 z-[100] bg-[#0f1929] border-t border-white/10 pb-safe-bottom"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-[#0f1929] border-t border-white/10 pb-safe-bottom"
       aria-label="Mobile navigation"
     >
       <div className="flex h-16">
@@ -821,7 +821,7 @@ export default function StorefrontLayout({ children }: { children: React.ReactNo
       <div className="flex flex-col min-h-screen">
         <Header />
         {/* pb-nav-safe keeps content clear of the bottom nav + device gesture bar */}
-        <main id="main-content" className="flex-1 pb-nav-safe">{children}</main>
+        <main id="main-content" className="flex-1 md:pb-0 pb-nav-safe">{children}</main>
         <Footer />
       </div>
       {/* BottomNav is outside the flex wrapper so fixed positioning works on all browsers */}
