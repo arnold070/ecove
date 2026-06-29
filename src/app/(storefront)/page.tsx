@@ -6,19 +6,25 @@ export const metadata: Metadata = {
   description: 'Shop electronics, fashion, home appliances, phones, beauty products and more at the best prices in Nigeria. Fast delivery nationwide.',
 }
 
+function fetchWithTimeout(url: string, opts: RequestInit & { next?: object }, ms = 5000) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), ms)
+  return fetch(url, { ...opts, signal: controller.signal }).finally(() => clearTimeout(timer))
+}
+
 async function getData() {
   const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   try {
     const [productsRes, categoriesRes, flashSaleRes, bestSellersRes, newestRes, fashionRes, bannersRes, statsRes, groceriesRes] = await Promise.all([
-      fetch(`${base}/api/storefront/products?featured=true&limit=12`,          { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/categories?limit=20&includeChildren=true`, { next: { revalidate: 600 } }),
-      fetch(`${base}/api/storefront/products?flashSale=true&limit=6`,          { next: { revalidate: 60  } }),
-      fetch(`${base}/api/storefront/products?bestSeller=true&limit=6`,         { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/products?sort=newest&limit=6`,             { next: { revalidate: 120 } }),
-      fetch(`${base}/api/storefront/products?parentCategory=fashion&limit=6`,  { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/banners`,                                  { next: { revalidate: 300 } }),
-      fetch(`${base}/api/storefront/stats`,                                    { next: { revalidate: 600 } }),
-      fetch(`${base}/api/storefront/products?parentCategory=groceries&limit=6`,{ next: { revalidate: 300 } }),
+      fetchWithTimeout(`${base}/api/storefront/products?featured=true&limit=12`,          { next: { revalidate: 300 } }),
+      fetchWithTimeout(`${base}/api/storefront/categories?limit=20&includeChildren=true`, { next: { revalidate: 600 } }),
+      fetchWithTimeout(`${base}/api/storefront/products?flashSale=true&limit=6`,          { next: { revalidate: 60  } }),
+      fetchWithTimeout(`${base}/api/storefront/products?bestSeller=true&limit=6`,         { next: { revalidate: 300 } }),
+      fetchWithTimeout(`${base}/api/storefront/products?sort=newest&limit=6`,             { next: { revalidate: 120 } }),
+      fetchWithTimeout(`${base}/api/storefront/products?parentCategory=fashion&limit=6`,  { next: { revalidate: 300 } }),
+      fetchWithTimeout(`${base}/api/storefront/banners`,                                  { next: { revalidate: 300 } }),
+      fetchWithTimeout(`${base}/api/storefront/stats`,                                    { next: { revalidate: 600 } }),
+      fetchWithTimeout(`${base}/api/storefront/products?parentCategory=groceries&limit=6`,{ next: { revalidate: 300 } }),
     ])
     const [featuredData, categoriesData, flashSaleData, bestSellersData, newestData, fashionData, bannersData, statsData, groceriesData] = await Promise.all([
       productsRes.ok     ? productsRes.json()     : { data: [] },

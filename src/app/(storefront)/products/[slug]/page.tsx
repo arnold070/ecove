@@ -7,7 +7,9 @@ interface Props { params: { slug: string } }
 async function getProduct(slug: string) {
   try {
     const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    const res = await fetch(`${base}/api/storefront/products/${slug}`, { next: { revalidate: 300 } })
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 5000)
+    const res = await fetch(`${base}/api/storefront/products/${slug}`, { next: { revalidate: 300 }, signal: controller.signal }).finally(() => clearTimeout(timer))
     if (!res.ok) return null
     const data = await res.json()
     return data.data as { product: any; related: any[] }
