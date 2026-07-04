@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
 import logger from '@/lib/logger'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, apiError, handleError } from '@/lib/api'
 import { sendPayoutApproved, sendPayoutPaid } from '@/lib/email'
 
@@ -14,7 +14,7 @@ const schema = z.object({
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'stores.manage')
     const body = schema.parse(await req.json())
 
     const payout = await prisma.payout.findUnique({
@@ -67,12 +67,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       return p
     })
 
-    // Emails
-    const email = payout.vendor.user.email
+    // Emails (only if the store has a linked contact account)
+    const email = payout.vendor.user?.email
     const biz   = payout.vendor.businessName
     const amt   = payout.amount.toFixed(2)
-    if (body.action === 'approve')   await sendPayoutApproved(email, biz, amt).catch(() => {})
-    if (body.action === 'mark_paid') await sendPayoutPaid(email, biz, amt, body.transferRef || 'N/A').catch(() => {})
+    if (email && body.action === 'approve')   await sendPayoutApproved(email, biz, amt).catch(() => {})
+    if (email && body.action === 'mark_paid') await sendPayoutPaid(email, biz, amt, body.transferRef || 'N/A').catch(() => {})
 
     await prisma.auditLog.create({
       data: { actorId: auth.sub, actorRole: auth.role, action: `payout_${body.action}`, entityType: 'payout', entityId: params.id, meta: body },
@@ -84,7 +84,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'stores.manage')
     const payout = await prisma.payout.findUnique({
       where: { id: params.id },
       include: {

@@ -17,7 +17,7 @@ export default function CartPage() {
   }
 
   const subtotal = totalPrice()
-  const shipping = subtotal >= 20000 ? 0 : 1500
+  const shipping = 1500
   const total = subtotal + shipping
 
   return (
@@ -85,8 +85,8 @@ export default function CartPage() {
             <h2 className="font-bold text-base mb-4">Order Summary</h2>
             <div className="space-y-2.5 text-sm mb-4">
               <div className="flex justify-between"><span className="text-gray-500">Subtotal ({totalItems()} items)</span><span>₦{subtotal.toLocaleString()}</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Delivery</span><span className={shipping === 0 ? 'text-green-600 font-semibold' : ''}>{shipping === 0 ? 'FREE' : `₦${shipping.toLocaleString()}`}</span></div>
-              {shipping > 0 && <p className="text-xs text-gray-400">Free delivery on orders over ₦20,000</p>}
+              <div className="flex justify-between"><span className="text-gray-500">Delivery</span><span>₦{shipping.toLocaleString()}</span></div>
+              <p className="text-xs text-gray-400">Delivery fee calculated at checkout</p>
             </div>
             <div className="flex justify-between font-extrabold text-base border-t border-gray-100 pt-3 mb-4">
               <span>Total</span>

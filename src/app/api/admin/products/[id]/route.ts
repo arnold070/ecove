@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, apiError, handleError } from '@/lib/api'
 import { sendProductApproved, sendProductRejected } from '@/lib/email'
 
@@ -11,24 +11,35 @@ const actionSchema = z.object({
 })
 
 const editSchema = z.object({
-  name:          z.string().min(2).max(255).optional(),
-  description:   z.string().optional(),
-  price:         z.number().positive().optional(),
-  comparePrice:  z.number().positive().optional(),
-  stock:         z.number().int().min(0).optional(),
-  categoryId:    z.string().optional(),
-  isFeatured:    z.boolean().optional(),
-  isBestSeller:  z.boolean().optional(),
-  isFlashSale:   z.boolean().optional(),
-  flashSalePrice:z.number().positive().optional(),
-  flashSaleEnd:  z.string().datetime().optional(),
-  tags:          z.array(z.string()).optional(),
+  name:             z.string().min(2).max(255).optional(),
+  description:      z.string().optional(),
+  shortDescription: z.string().max(160).optional(),
+  price:            z.number().positive().optional(),
+  comparePrice:     z.number().positive().optional(),
+  costPrice:        z.number().positive().optional(),
+  sku:              z.string().max(100).optional(),
+  stock:            z.number().int().min(0).optional(),
+  lowStockAlert:    z.number().int().min(0).optional(),
+  weight:           z.number().positive().optional(),
+  categoryId:       z.string().optional(),
+  brand:            z.string().max(100).optional(),
+  handlingTime:     z.string().max(50).optional(),
+  shipsFrom:        z.string().max(100).optional(),
+  isFeatured:       z.boolean().optional(),
+  isBestSeller:     z.boolean().optional(),
+  isFlashSale:      z.boolean().optional(),
+  flashSalePrice:   z.number().positive().optional(),
+  flashSaleEnd:     z.string().datetime().optional(),
+  tags:             z.array(z.string()).optional(),
+  metaTitle:        z.string().max(70).optional(),
+  metaDescription:  z.string().max(160).optional(),
+  specifications:   z.record(z.string()).optional(),
 })
 
 // GET /api/admin/products/[id]
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'products.view')
     const product = await prisma.product.findUnique({
       where: { id: params.id },
       include: {
@@ -47,7 +58,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 // PATCH /api/admin/products/[id]  — approve | reject | suspend
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'products.manage')
     const body = actionSchema.parse(await req.json())
 
     const product = await prisma.product.findUnique({
@@ -72,9 +83,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       data: { actorId: auth.sub, actorRole: auth.role, action: `product_${body.action}`, entityType: 'product', entityId: params.id, meta: { note: body.adminNote } },
     })
 
-    const vendorEmail = product.vendor.user.email
-    if (body.action === 'approve') await sendProductApproved(vendorEmail, product.name).catch(() => {})
-    if (body.action === 'reject')  await sendProductRejected(vendorEmail, product.name, body.adminNote || 'Does not meet listing standards').catch(() => {})
+    const vendorEmail = product.vendor.user?.email
+    if (vendorEmail && body.action === 'approve') await sendProductApproved(vendorEmail, product.name).catch(() => {})
+    if (vendorEmail && body.action === 'reject')  await sendProductRejected(vendorEmail, product.name, body.adminNote || 'Does not meet listing standards').catch(() => {})
 
     return ok(updated)
   } catch (err) { return handleError(err) }
@@ -83,7 +94,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 // PUT /api/admin/products/[id]  — admin edits any product
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'products.manage')
     const body = editSchema.parse(await req.json())
     const data: any = { ...body }
     if (body.flashSaleEnd) data.flashSaleEnd = new Date(body.flashSaleEnd)
@@ -98,7 +109,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 // DELETE /api/admin/products/[id]
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'products.manage')
     await prisma.product.delete({ where: { id: params.id } })
     await prisma.auditLog.create({
       data: { actorId: auth.sub, actorRole: auth.role, action: 'product_delete', entityType: 'product', entityId: params.id },

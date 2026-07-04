@@ -117,10 +117,10 @@ test.describe('Authentication & Authorization', () => {
     expect([401, 403]).toContain(res.status())
   })
 
-  test('cannot access vendor API with expired token', async ({ request }) => {
+  test('cannot access admin API with expired token', async ({ request }) => {
     // An obviously fake/expired token
-    const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6InZlbmRvciIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImV4cCI6MTYwMDAwMDAwMH0.invalid'
-    const res = await request.get('/api/vendor/dashboard', {
+    const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAwMDAwMDAwfQ.invalid'
+    const res = await request.get('/api/admin/products', {
       headers: { 'Authorization': `Bearer ${expiredToken}` }
     })
     expect([401, 403]).toContain(res.status())
@@ -225,10 +225,5 @@ test.describe('Sensitive Route Protection', () => {
     expect(url).toMatch(/\/login/)
     // Should have a reason parameter
     expect(url).toContain('admin_only')
-  })
-
-  test('/vendor/dashboard is protected', async ({ page }) => {
-    await page.goto('/vendor/dashboard')
-    expect(page.url()).toMatch(/\/vendor\/login/)
   })
 })

@@ -50,10 +50,6 @@ export async function POST(req: NextRequest) {
         discountAmount = Math.min(Number(coupon.value), subtotal)
         description = `₦${Number(coupon.value).toLocaleString()} off`
         break
-      case 'free_shipping':
-        discountAmount = 0
-        description = 'Free shipping'
-        break
       case 'buy_x_get_y':
         discountAmount = 0
         description = 'Buy X Get Y applied'

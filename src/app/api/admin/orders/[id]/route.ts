@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, apiError, handleError } from '@/lib/api'
 
 const patchSchema = z.object({
@@ -11,7 +11,7 @@ const patchSchema = z.object({
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'orders.view')
     const order = await prisma.order.findUnique({
       where: { id: params.id },
       include: {
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'orders.manage')
     const body = patchSchema.parse(await req.json())
     const updated = await prisma.order.update({
       where: { id: params.id },

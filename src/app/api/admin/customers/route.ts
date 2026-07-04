@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { paginated, ok, handleError, getPagination } from '@/lib/api'
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'customers.view')
     const sp = req.nextUrl.searchParams
     const { page, limit, skip } = getPagination(sp)
     const search = sp.get('q') || ''
@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
 // PATCH /api/admin/customers — deactivate / reactivate a user
 export async function PATCH(req: NextRequest) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'customers.manage')
     const body = z.object({
       id: z.string(),
       action: z.enum(['activate', 'deactivate']),

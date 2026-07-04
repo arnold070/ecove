@@ -159,9 +159,11 @@ export async function POST(req: NextRequest) {
         where:  { id: { in: vendorIds } },
         select: { id: true, businessName: true, user: { select: { email: true } } },
       }).catch(() => [])
-      const vendorEmailMap = new Map(vendorRows.map((v: { id: string; businessName: string; user: { email: string } }) => [
-        v.id, { email: v.user.email, biz: v.businessName },
-      ]))
+      const vendorEmailMap = new Map(
+        vendorRows
+          .filter((v) => v.user)
+          .map((v) => [v.id, { email: v.user!.email, biz: v.businessName }])
+      )
       const vendorMap = new Map<string, { email: string; biz: string; items: string[] }>()
       for (const item of order.items) {
         if (!item.vendorId) continue

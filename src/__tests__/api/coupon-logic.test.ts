@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-type CouponType = 'percentage' | 'fixed' | 'free_shipping' | 'buy_x_get_y'
+type CouponType = 'percentage' | 'fixed' | 'buy_x_get_y'
 
 interface Coupon {
   code: string; type: CouponType; value?: number
@@ -89,8 +89,8 @@ describe('Coupon discount application', () => {
     expect(applyDiscount(validCoupon({ type: 'fixed', value: 20000 }), 5000)).toBe(5000)
   })
 
-  it('free_shipping returns 0 discount amount', () => {
-    expect(applyDiscount(validCoupon({ type: 'free_shipping' }), 10000)).toBe(0)
+  it('buy_x_get_y returns 0 discount amount', () => {
+    expect(applyDiscount(validCoupon({ type: 'buy_x_get_y' }), 10000)).toBe(0)
   })
 
   it('100% percentage = full discount', () => {

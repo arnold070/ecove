@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requireAuth, requirePermission } from '@/lib/auth'
 import { ok, handleError } from '@/lib/api'
 
 export async function GET(req: NextRequest) {
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'settings.manage')
     const body = z.record(z.string()).parse(await req.json())
 
     await prisma.$transaction(

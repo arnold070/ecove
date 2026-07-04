@@ -51,20 +51,10 @@ describe('Order number generation format', () => {
   })
 })
 
-describe('Shipping fee threshold', () => {
-  const FREE_THRESHOLD = 20000
-
-  it('₦20,000 qualifies for free shipping', () => {
-    expect(20000 >= FREE_THRESHOLD).toBe(true)
-  })
-  it('₦19,999 does not qualify', () => {
-    expect(19999 >= FREE_THRESHOLD).toBe(false)
-  })
-  it('free_shipping coupon bypasses threshold', () => {
-    const getShipping = (subtotal: number, couponType?: string) =>
-      (subtotal >= FREE_THRESHOLD || couponType === 'free_shipping') ? 0 : 1500
-    expect(getShipping(500, 'free_shipping')).toBe(0)
+describe('Shipping fee', () => {
+  it('is always the flat calculated amount, regardless of order size', () => {
+    const getShipping = (_subtotal: number) => 1500
     expect(getShipping(500)).toBe(1500)
-    expect(getShipping(25000)).toBe(0)
+    expect(getShipping(25000)).toBe(1500)
   })
 })

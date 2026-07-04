@@ -45,21 +45,20 @@ async function getData() {
       newest:       newestData.data      || [],
       fashion:      fashionData.data     || [],
       banners:      bannersData.data     || [],
-      vendorCount:  statsData.vendorCount  || 184,
       productCount: statsData.productCount || 200,
       groceries:    groceriesData.data   || [],
     }
   } catch {
     return {
       featured: [], categories: [], flashSale: [], bestSellers: [],
-      newest: [], fashion: [], banners: [], vendorCount: 184, productCount: 200,
+      newest: [], fashion: [], banners: [], productCount: 200,
       groceries: [],
     }
   }
 }
 
 export default async function HomePage() {
-  const { featured, categories, flashSale, bestSellers, newest, fashion, banners, vendorCount, productCount, groceries } = await getData()
+  const { featured, categories, flashSale, bestSellers, newest, fashion, banners, productCount, groceries } = await getData()
   return (
     <HomepageClient
       featured={featured}
@@ -69,7 +68,6 @@ export default async function HomePage() {
       newest={newest}
       fashion={fashion}
       banners={banners}
-      vendorCount={vendorCount}
       productCount={productCount}
       groceries={groceries}
     />

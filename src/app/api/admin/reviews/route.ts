@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, paginated, handleError, getPagination } from '@/lib/api'
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'reviews.manage')
     const sp = req.nextUrl.searchParams
     const { page, limit, skip } = getPagination(sp)
     const status = sp.get('status') as any || 'pending'
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'reviews.manage')
     const body = z.object({
       id: z.string(),
       action: z.enum(['approve', 'reject', 'flag']),

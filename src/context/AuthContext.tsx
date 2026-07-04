@@ -10,6 +10,7 @@ interface VendorInfo {
 interface User {
   id: string; firstName: string; lastName: string
   email: string; role: string; avatarUrl?: string
+  permissions?: string[]
   vendor?: VendorInfo
 }
 interface AuthCtx {
@@ -45,7 +46,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(data.data.user)
     const role = data.data.user.role
     if (role === 'super_admin' || role === 'admin') router.push('/admin')
-    else if (role === 'vendor') router.push('/vendor/dashboard')
     else router.push('/')
   }
 

@@ -75,9 +75,7 @@ export default function AdminSettingsPage() {
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="font-bold text-sm text-gray-700 mb-4">🏪 Vendor Settings</h2>
-          <Toggle label="Allow Vendor Registration" k="vendor.registration.open" desc="Let new vendors apply to sell" />
-          <Toggle label="Auto-Approve Vendors" k="vendor.auto_approve" desc="Skip manual vendor review" />
+          <h2 className="font-bold text-sm text-gray-700 mb-4">🏪 Store Settings</h2>
           <Toggle label="Auto-Approve Products" k="product.auto_approve" desc="Skip manual product review" />
         </div>
 

@@ -87,7 +87,7 @@ export async function PATCH(
 
     const vendorEmails = new Map<string, { email: string; biz: string; items: string[] }>()
     for (const item of itemsWithVendors) {
-      if (!item.vendor) continue
+      if (!item.vendor?.user) continue
       const key = item.vendorId!
       if (!vendorEmails.has(key)) {
         vendorEmails.set(key, { email: item.vendor.user.email, biz: item.vendor.businessName, items: [] })

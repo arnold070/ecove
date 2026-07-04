@@ -65,7 +65,6 @@ export default function AdminCouponsPage() {
                   <option value="">— Select type —</option>
                   <option value="percentage">Percentage Off</option>
                   <option value="fixed">Fixed Amount Off</option>
-                  <option value="free_shipping">Free Shipping</option>
                 </select>
               </div>
               {(couponType === 'percentage' || couponType === 'fixed') && (

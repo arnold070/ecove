@@ -222,11 +222,6 @@ test.describe('Protected Route Redirects', () => {
     await expect(page).toHaveURL(/\/login/)
   })
 
-  test('redirects /vendor/dashboard to vendor login for unauthenticated users', async ({ page }) => {
-    await page.goto('/vendor/dashboard')
-    await expect(page).toHaveURL(/\/vendor\/login/)
-  })
-
   test('shows unauthorized page for wrong role', async ({ page }) => {
     await page.goto('/unauthorized')
     await expect(page).toHaveURL(/\/unauthorized/)

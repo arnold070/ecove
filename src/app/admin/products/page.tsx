@@ -17,7 +17,7 @@ const STATUS_STYLE: Record<string, { bg: string; color: string }> = {
 
 export default function AdminProductsPage() {
   const qc = useQueryClient()
-  const [status, setStatus] = useState('pending')
+  const [status, setStatus] = useState('')
   const [q, setQ] = useState('')
   const [page, setPage] = useState(1)
   const [rejectModal, setRejectModal] = useState<string | null>(null)
@@ -51,13 +51,21 @@ export default function AdminProductsPage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-extrabold text-gray-900">Product Management</h1>
+          <h1 className="text-xl font-extrabold text-gray-900">Products</h1>
           <p className="text-sm text-gray-400 mt-0.5">{pagination?.total || 0} products</p>
+        </div>
+        <div className="flex gap-2">
+          <Link href="/admin/products/bulk" className="px-4 py-2.5 rounded-xl text-sm font-bold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors">
+            Bulk Import / Export
+          </Link>
+          <Link href="/admin/products/new" className="px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-colors" style={{ background: '#f68b1f' }}>
+            + New Product
+          </Link>
         </div>
       </div>
 
       <div className="flex gap-2 mb-5 overflow-x-auto pb-1 flex-wrap">
-        {[['pending','⏳ Pending Approval'], ['approved','✅ Live'], ['rejected','❌ Rejected'], ['','All']].map(([val, label]) => (
+        {[['','All'], ['approved','✅ Live'], ['pending','⏳ Pending Approval'], ['rejected','❌ Rejected'], ['suspended','⏸ Suspended']].map(([val, label]) => (
           <button key={val} onClick={() => { setStatus(val); setPage(1) }}
             className={`shrink-0 px-4 py-2 rounded-xl text-sm font-bold transition-colors ${status === val ? 'text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-orange-300'}`}
             style={status === val ? { background: '#f68b1f' } : {}}>
@@ -115,6 +123,7 @@ export default function AdminProductsPage() {
                             <button onClick={() => doAction(p.id, 'reject')} className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition-colors">❌ Reject</button>
                           </>}
                           {p.status === 'approved' && <button onClick={() => doAction(p.id, 'suspend')} className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-yellow-100 text-yellow-700 hover:bg-yellow-600 hover:text-white transition-colors">⏸ Suspend</button>}
+                          <Link href={`/admin/products/${p.id}/edit`} className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-gray-100 text-gray-700 hover:bg-gray-700 hover:text-white transition-colors">✏️ Edit</Link>
                           <Link href={`/products/${p.slug}`} target="_blank" className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition-colors">👁 View</Link>
                         </div>
                       </td>

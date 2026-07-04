@@ -48,6 +48,11 @@ export interface Vendor extends VendorSummary {
   state: string
   address: string
   bannerUrl?: string
+  managedById?: string
+  manager?: { id: string; firstName: string; lastName: string; email: string }
+  isVisible: boolean
+  isFeatured: boolean
+  categoryTags: string[]
   bankName?: string
   bankAccountNumber?: string
   bankAccountName?: string
@@ -258,7 +263,7 @@ export interface CommissionRule {
 export interface Coupon {
   id: string
   code: string
-  type: 'percentage' | 'fixed' | 'free_shipping' | 'buy_x_get_y'
+  type: 'percentage' | 'fixed' | 'buy_x_get_y'
   value?: number
   minOrderAmount?: number
   maxUses?: number

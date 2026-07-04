@@ -469,11 +469,11 @@ const TESTIMONIALS = [
 
 // ── Main Homepage Component ────────────────────────────────────────────────────
 export default function HomepageClient({
-  featured, categories, flashSale, bestSellers, newest, fashion, banners, vendorCount = 184, productCount = 200, groceries = [],
+  featured, categories, flashSale, bestSellers, newest, fashion, banners, productCount = 200, groceries = [],
 }: {
   featured: Product[]; categories: Category[]; flashSale: Product[]
   bestSellers: Product[]; newest: Product[]; fashion: Product[]
-  banners: Banner[]; vendorCount?: number; productCount?: number
+  banners: Banner[]; productCount?: number
   groceries?: Product[]
 }) {
   // Top-level categories (no parent — all seeded cats are top-level)
@@ -606,7 +606,7 @@ export default function HomepageClient({
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: '🚚', bg: 'bg-orange-50', title: 'Free Delivery',    sub: 'Orders over ₦20,000' },
+              { icon: '🚚', bg: 'bg-orange-50', title: 'Fast Delivery',    sub: 'Transparent Delivery Pricing' },
               { icon: '🔒', bg: 'bg-blue-50',   title: 'Secure Payment',   sub: 'Paystack & Flutterwave' },
               { icon: '✅', bg: 'bg-green-50',  title: 'Verified Sellers', sub: 'All vendors screened' },
               { icon: '↩️', bg: 'bg-purple-50', title: 'Easy Returns',     sub: '7-day return policy' },
@@ -961,7 +961,7 @@ export default function HomepageClient({
         </div>
       </section>
 
-      {/* ── Vendor CTA ───────────────────────────────────────────────────────── */}
+      {/* ── Partner CTA ──────────────────────────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 pb-10">
         <div className="relative rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#f68b1f] via-[#d4720e] to-[#b85c09]" />
@@ -970,18 +970,18 @@ export default function HomepageClient({
           <div className="absolute -bottom-12 -left-12 w-44 h-44 bg-white/10 rounded-full" />
           <div className="relative p-8 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="text-white text-center lg:text-left">
-              <h3 className="text-2xl lg:text-3xl font-extrabold mb-2">Start Selling on Ecove Today</h3>
-              <p className="text-sm lg:text-base opacity-90 mb-1">Join {vendorCount}+ active vendors reaching thousands of customers</p>
+              <h3 className="text-2xl lg:text-3xl font-extrabold mb-2">Partner With Ecove</h3>
+              <p className="text-sm lg:text-base opacity-90 mb-1">Bring your products to a curated marketplace trusted by thousands of customers</p>
               <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-3 text-sm">
-                {['✅ Free to start', '📦 We handle logistics', '💰 Weekly payouts', '📊 Sales dashboard'].map(f => (
+                {['✅ Verified suppliers', '📦 Managed fulfillment', '💰 Reliable payouts', '📊 Operational excellence'].map(f => (
                   <span key={f} className="opacity-90">{f}</span>
                 ))}
               </div>
             </div>
-            <Link href="/vendor/register"
+            <Link href="/partners"
               className="shrink-0 bg-white font-extrabold px-10 py-4 rounded-2xl text-sm hover:scale-105 transition-transform shadow-xl"
               style={{ color: '#d4720e' }}>
-              Become a Vendor →
+              Partner With Us →
             </Link>
           </div>
         </div>

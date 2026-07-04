@@ -71,7 +71,7 @@ export default function ReturnsPage() {
               <h2 className="text-xl font-semibold text-gray-900 mb-3">5. Defective or Wrong Items</h2>
               <p>
                 If you received a defective, damaged, or incorrect item, please contact us within{' '}
-                <strong>48 hours</strong> of delivery. We will arrange a free return pickup and send a
+                <strong>48 hours</strong> of delivery. We will arrange a return pickup and send a
                 replacement or full refund at no additional cost.
               </p>
             </section>

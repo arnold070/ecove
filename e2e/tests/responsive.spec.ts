@@ -13,7 +13,7 @@ const VIEWPORTS = [
   { name: 'desktop',  width: 1440, height: 900  },
 ]
 
-const TEST_PAGES = ['/', '/login', '/register', '/search', '/cart', '/vendor/register']
+const TEST_PAGES = ['/', '/login', '/register', '/search', '/cart', '/partners']
 
 for (const vp of VIEWPORTS) {
   test.describe(`Viewport ${vp.name} (${vp.width}px)`, () => {

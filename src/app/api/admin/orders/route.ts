@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { paginated, handleError, getPagination } from '@/lib/api'
 
 // GET /api/admin/orders
 export async function GET(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'orders.view')
     const sp = req.nextUrl.searchParams
     const { page, limit, skip } = getPagination(sp)
     const status   = sp.get('status') as any

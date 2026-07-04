@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, created, apiError, handleError } from '@/lib/api'
 import { uniqueSlug } from '@/lib/utils'
 
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'content.manage')
     const body = schema.parse(await req.json())
     const slug = await uniqueSlug(body.name, 'category')
     const cat  = await prisma.category.create({ data: { ...body, slug } })
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'content.manage')
     const body = z.object({ id: z.string(), ...schema.shape }).parse(await req.json())
     const { id, name, ...rest } = body
     const existing = await prisma.category.findUnique({ where: { id } })
@@ -58,7 +58,7 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const auth  = await requireAuth(req, ['admin', 'super_admin'])
+    const auth  = await requirePermission(req, 'content.manage')
     const { id } = z.object({ id: z.string() }).parse(await req.json())
     await prisma.category.delete({ where: { id } })
     await prisma.auditLog.create({

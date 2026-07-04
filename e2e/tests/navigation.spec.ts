@@ -13,9 +13,7 @@ const PUBLIC_ROUTES = [
   { path: '/track',               title: /ecove/i },
   { path: '/returns',             title: /ecove/i },
   { path: '/privacy',             title: /ecove/i },
-  { path: '/vendor-policies',     title: /ecove/i },
-  { path: '/vendor/register',     title: /ecove/i },
-  { path: '/vendor/login',        title: /ecove/i },
+  { path: '/partners',            title: /ecove/i },
   { path: '/not-found-route',     title: /ecove|404/i },
 ]
 
@@ -217,18 +215,13 @@ test.describe('Security Headers', () => {
 })
 
 test.describe('Redirect Rules', () => {
-  test('/dashboard redirects to /vendor/dashboard', async ({ page }) => {
-    await page.goto('/dashboard')
-    await expect(page).toHaveURL(/\/vendor\/dashboard|\/vendor\/login/)
-  })
-
-  test('/seller redirects to /vendor/register', async ({ page }) => {
+  test('/seller redirects to /partners', async ({ page }) => {
     await page.goto('/seller')
-    await expect(page).toHaveURL(/\/vendor\/register/)
+    await expect(page).toHaveURL(/\/partners/)
   })
 
-  test('/apply redirects to /vendor/register', async ({ page }) => {
+  test('/apply redirects to /partners', async ({ page }) => {
     await page.goto('/apply')
-    await expect(page).toHaveURL(/\/vendor\/register/)
+    await expect(page).toHaveURL(/\/partners/)
   })
 })

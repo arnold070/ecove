@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, handleError } from '@/lib/api'
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'analytics.view')
 
     const now       = new Date()
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)

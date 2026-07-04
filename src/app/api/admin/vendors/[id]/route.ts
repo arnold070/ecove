@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requireAuth, requirePermission } from '@/lib/auth'
 import { ok, apiError, handleError } from '@/lib/api'
 import {
   sendVendorApproved,
@@ -24,6 +24,12 @@ const editSchema = z.object({
   city:         z.string().optional(),
   state:        z.string().optional(),
   address:      z.string().optional(),
+  logoUrl:      z.string().url().optional(),
+  bannerUrl:    z.string().url().optional(),
+  managedById:  z.string().uuid().nullable().optional(),
+  isVisible:    z.boolean().optional(),
+  isFeatured:   z.boolean().optional(),
+  categoryTags: z.array(z.string()).optional(),
   commissionRate: z.number().min(0).max(100).optional(),
   maxProducts:  z.number().min(1).max(10000).optional(),
   isAutoApproved: z.boolean().optional(),
@@ -32,7 +38,7 @@ const editSchema = z.object({
 // GET /api/admin/vendors/[id]
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'stores.view')
     const vendor = await prisma.vendor.findUnique({
       where: { id: params.id },
       include: {
@@ -50,7 +56,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 // PATCH /api/admin/vendors/[id]  — approve | reject | suspend | activate
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'stores.manage')
     const body = patchSchema.parse(await req.json())
 
     const vendor = await prisma.vendor.findUnique({
@@ -71,14 +77,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         statusNote:    body.statusNote,
         commissionRate: body.commissionRate,
         ...(body.action === 'approve' && { approvedAt: new Date(), approvedById: auth.sub }),
-        // If approved, set vendor role on user
       },
     })
-
-    // Update user role when vendor is approved
-    if (body.action === 'approve') {
-      await prisma.user.update({ where: { id: vendor.userId }, data: { role: 'vendor' } })
-    }
 
     // Audit log
     await prisma.auditLog.create({
@@ -89,12 +89,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       },
     })
 
-    // Send email
-    const email = vendor.user.email
+    // Send email (only if the store has a linked contact account)
+    const email = vendor.user?.email
     const name  = vendor.businessName
-    if (body.action === 'approve')  await sendVendorApproved(email, name).catch(() => {})
-    if (body.action === 'reject')   await sendVendorRejected(email, name, body.statusNote || 'Does not meet requirements').catch(() => {})
-    if (body.action === 'suspend')  await sendVendorSuspended(email, name, body.statusNote || 'Policy violation').catch(() => {})
+    if (email && body.action === 'approve')  await sendVendorApproved(email, name).catch(() => {})
+    if (email && body.action === 'reject')   await sendVendorRejected(email, name, body.statusNote || 'Does not meet requirements').catch(() => {})
+    if (email && body.action === 'suspend')  await sendVendorSuspended(email, name, body.statusNote || 'Policy violation').catch(() => {})
 
     return ok(updated)
   } catch (err) { return handleError(err) }
@@ -103,7 +103,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 // PUT /api/admin/vendors/[id]  — edit vendor info
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'stores.manage')
     const body = editSchema.parse(await req.json())
     const updated = await prisma.vendor.update({ where: { id: params.id }, data: body })
     await prisma.auditLog.create({

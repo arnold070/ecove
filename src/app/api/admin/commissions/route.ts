@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, created, handleError } from '@/lib/api'
 
 const schema = z.object({
@@ -15,7 +15,7 @@ const schema = z.object({
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'stores.manage')
     const rules = await prisma.commissionRule.findMany({
       orderBy: { createdAt: 'asc' },
       include: {
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'stores.manage')
     const body = schema.parse(await req.json())
     const rule = await prisma.commissionRule.create({ data: body as any })
     await prisma.auditLog.create({
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const auth = await requireAuth(req, ['admin', 'super_admin'])
+    const auth = await requirePermission(req, 'stores.manage')
     const body = z.object({ id: z.string(), ...schema.shape }).parse(await req.json())
     const { id, ...data } = body
     const rule = await prisma.commissionRule.update({ where: { id }, data: data as any })

@@ -78,10 +78,10 @@ function Header() {
           <div className="flex items-center gap-5">
             <span className="flex items-center gap-1.5"><span>📞</span> +234 800 ECOVE (32683)</span>
             <span className="text-white/40">|</span>
-            <Link href="/vendor/register" className="hover:text-orange-400 transition-colors">Sell on Ecove</Link>
+            <Link href="/partners" className="hover:text-orange-400 transition-colors">Partner With Us</Link>
           </div>
           <div className="flex items-center gap-5 text-white/70">
-            <span>🚚 Free delivery over ₦20,000</span>
+            <span>🚚 Nationwide Coverage</span>
             <span className="text-white/40">|</span>
             <Link href="/track" className="hover:text-white transition-colors">Track Order</Link>
           </div>
@@ -232,11 +232,11 @@ function Header() {
 
             {/* Right nav icons */}
             <div className="flex items-center gap-1 shrink-0">
-              {/* Sell on Ecove */}
-              <Link href="/vendor/register"
+              {/* Partner With Us */}
+              <Link href="/partners"
                 className="hidden lg:flex flex-col items-center px-3 py-1 text-gray-600 hover:text-orange-500 rounded-lg transition-colors text-center">
-                <span className="text-lg">🏪</span>
-                <span className="text-[10px] font-semibold whitespace-nowrap">Sell</span>
+                <span className="text-lg">🤝</span>
+                <span className="text-[10px] font-semibold whitespace-nowrap">Partner</span>
               </Link>
 
               {/* Account dropdown */}
@@ -262,9 +262,6 @@ function Header() {
                       {(user.role === 'admin' || user.role === 'super_admin') && (
                         <Link href="/admin"  className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-orange-50 font-semibold text-orange-600">⚙️ Admin Panel</Link>
                       )}
-                      {user.role === 'vendor' && (
-                        <Link href="/vendor/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-orange-50 font-semibold text-orange-600">🏪 Vendor Dashboard</Link>
-                      )}
                       <hr className="my-1" />
                       <button type="button" onClick={logout} className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50">🚪 Sign Out</button>
                     </>
@@ -276,7 +273,7 @@ function Header() {
                       </div>
                       <hr className="my-1" />
                       <Link href="/orders"          className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 text-gray-700">📦 My Orders</Link>
-                      <Link href="/vendor/register" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-orange-50 text-orange-600 font-semibold">🏪 Sell on Ecove</Link>
+                      <Link href="/partners" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-orange-50 text-orange-600 font-semibold">🤝 Partner With Us</Link>
                     </>
                   )}
                 </div>
@@ -381,7 +378,7 @@ function Header() {
               <div className="ml-auto flex items-center gap-1 pr-1">
                 <Link href="/about"           className="px-4 py-2.5 whitespace-nowrap hover:bg-white/15 transition-colors font-medium">About</Link>
                 <Link href="/contact"         className="px-4 py-2.5 whitespace-nowrap hover:bg-white/15 transition-colors font-medium">Contact</Link>
-                <Link href="/vendor/register" className="px-4 py-2 text-xs font-bold bg-white/15 hover:bg-white/25 rounded-lg transition-colors whitespace-nowrap">🏪 Sell on Ecove</Link>
+                <Link href="/partners" className="px-4 py-2 text-xs font-bold bg-white/15 hover:bg-white/25 rounded-lg transition-colors whitespace-nowrap">🤝 Partner With Us</Link>
               </div>
             </div>
           </nav>
@@ -526,11 +523,11 @@ function Header() {
             )}
           </div>
 
-          {/* Sell on Ecove */}
+          {/* Partner With Us */}
           <div className="px-4 py-3 border-b border-orange-100 bg-orange-50 shrink-0">
-            <Link href="/vendor/register" onClick={() => setMenuOpen(false)}
+            <Link href="/partners" onClick={() => setMenuOpen(false)}
               className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-bold text-white rounded-xl bg-orange-500 hover:bg-orange-600 transition-colors">
-              🏪 Sell on Ecove
+              🤝 Partner With Us
             </Link>
           </div>
 
@@ -571,9 +568,6 @@ function Header() {
                 <p className="px-4 pt-4 pb-1.5 text-xs font-bold text-gray-400 uppercase tracking-wide">My Account</p>
                 <Link href="/orders"  onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-b border-gray-50">📦 My Orders</Link>
                 <Link href="/account" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-b border-gray-50">👤 Profile</Link>
-                {user.role === 'vendor' && (
-                  <Link href="/vendor/dashboard" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-orange-600 hover:bg-orange-50 border-b border-gray-50">🏪 Vendor Dashboard</Link>
-                )}
                 {(user.role === 'admin' || user.role === 'super_admin') && (
                   <Link href="/admin" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-orange-600 hover:bg-orange-50 border-b border-gray-50">⚙️ Admin Panel</Link>
                 )}
@@ -755,8 +749,6 @@ function Footer() {
         {[
           { title: 'Shop',
             links: [['All Products','/search'],['Flash Sales','/search?flashSale=true'],['New Arrivals','/search?sort=newest'],['Best Sellers','/search?bestSeller=true'],['Phones & Tablets','/categories/phones-tablets']] },
-          { title: 'Sell',
-            links: [['Start Selling','/vendor/register'],['Vendor Login','/vendor/login'],['Vendor Policies','/vendor-policies'],['Commission Rates','/vendor-policies#commission'],['Seller Support','mailto:sellers@ecove.com.ng']] },
           { title: 'Help',
             links: [['Contact Us','mailto:hello@ecove.com.ng'],['Track Order','/track'],['Returns Policy','/returns'],['Privacy Policy','/privacy'],['Terms of Use','/terms']] },
           { title: 'Company',

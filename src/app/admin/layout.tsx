@@ -4,20 +4,23 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import Link from 'next/link'
 
-const NAV = [
-  { href: '/admin',             icon: '📊', label: 'Dashboard'   },
-  { href: '/admin/vendors',     icon: '🏪', label: 'Vendors'     },
-  { href: '/admin/products',    icon: '🛍️', label: 'Products'    },
-  { href: '/admin/orders',      icon: '📦', label: 'Orders'      },
-  { href: '/admin/payouts',     icon: '💸', label: 'Payouts'     },
-  { href: '/admin/commissions', icon: '💹', label: 'Commissions' },
-  { href: '/admin/categories',  icon: '🗂️', label: 'Categories'  },
-  { href: '/admin/banners',     icon: '🖼️', label: 'Banners'     },
-  { href: '/admin/coupons',     icon: '🎟️', label: 'Coupons'     },
-  { href: '/admin/reviews',     icon: '⭐',  label: 'Reviews'     },
-  { href: '/admin/customers',   icon: '👥', label: 'Customers'   },
-  { href: '/admin/analytics',   icon: '📈', label: 'Analytics'   },
-  { href: '/admin/settings',    icon: '⚙️', label: 'Settings'    },
+const NAV: { href: string; icon: string; label: string; permission?: string; superAdminOnly?: boolean }[] = [
+  { href: '/admin',              icon: '📊', label: 'Dashboard' },
+  { href: '/admin/vendors',      icon: '🏪', label: 'Stores',       permission: 'stores.view' },
+  { href: '/admin/products',     icon: '🛍️', label: 'Products',     permission: 'products.view' },
+  { href: '/admin/orders',       icon: '📦', label: 'Orders',       permission: 'orders.view' },
+  { href: '/admin/customers',    icon: '👥', label: 'Customers',    permission: 'customers.view' },
+  { href: '/admin/partnerships', icon: '🤝', label: 'Partnerships', permission: 'partnerships.view' },
+  { href: '/admin/coupons',      icon: '🎟️', label: 'Promotions',   permission: 'promotions.manage' },
+  { href: '/admin/banners',      icon: '🖼️', label: 'Banners',      permission: 'promotions.manage' },
+  { href: '/admin/categories',   icon: '🗂️', label: 'Categories',   permission: 'content.manage' },
+  { href: '/admin/reviews',      icon: '⭐',  label: 'Reviews',      permission: 'reviews.manage' },
+  { href: '/admin/payouts',      icon: '💸', label: 'Payouts',      permission: 'stores.manage' },
+  { href: '/admin/commissions',  icon: '💹', label: 'Commissions',  permission: 'stores.manage' },
+  { href: '/admin/analytics',    icon: '📈', label: 'Analytics',    permission: 'analytics.view' },
+  { href: '/admin/audit-logs',   icon: '📜', label: 'Audit Logs',   permission: 'audit_logs.view' },
+  { href: '/admin/sub-admins',   icon: '🛡️', label: 'Sub Admins',   superAdminOnly: true },
+  { href: '/admin/settings',     icon: '⚙️', label: 'Settings',     permission: 'settings.manage' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -46,6 +49,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const isActive = (href: string) =>
     href === '/admin' ? pathname === '/admin' : pathname.startsWith(href)
 
+  // Server-side requirePermission() is the real enforcement — this filter is UX only.
+  const visibleNav = NAV.filter(item => {
+    if (user.role === 'super_admin') return true
+    if (item.superAdminOnly) return false
+    if (!item.permission) return true
+    return user.permissions?.includes(item.permission)
+  })
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* ── Sidebar ─────────────────────────────────── */}
@@ -64,7 +75,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Nav items */}
         <nav className="flex-1 overflow-y-auto py-3 px-2">
-          {NAV.map(item => (
+          {visibleNav.map(item => (
             <Link
               key={item.href}
               href={item.href}
@@ -122,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             ☰
           </button>
           <p className="text-sm font-semibold text-gray-700 hidden md:block">
-            {NAV.find(n => isActive(n.href))?.label || 'Admin Panel'}
+            {visibleNav.find(n => isActive(n.href))?.label || 'Admin Panel'}
           </p>
           <div className="ml-auto flex items-center gap-3">
             <Link href="/" target="_blank" className="text-xs text-gray-400 hover:text-orange-600 transition-colors">

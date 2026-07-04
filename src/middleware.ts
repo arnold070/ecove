@@ -30,17 +30,11 @@ const PROTECTED: { pattern: RegExp; roles: string[]; redirect: string }[] = [
     roles:   ['admin', 'super_admin'],
     redirect: '/login?next=/admin&reason=admin_only',
   },
-  {
-    pattern: /^\/vendor\/dashboard(\/.*)?$/,
-    roles:   ['vendor'],
-    redirect: '/vendor/login?reason=vendor_only',
-  },
 ]
 
 // API routes that should return 401 (not redirect)
 const PROTECTED_API = [
   /^\/api\/admin\//,
-  /^\/api\/vendor\//,
   /^\/api\/auth\/me$/,
   /^\/api\/checkout$/,
   /^\/api\/upload$/,

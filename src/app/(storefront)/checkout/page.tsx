@@ -60,8 +60,7 @@ export default function CheckoutPage() {
 
   const subtotal = totalPrice()
   const couponDiscount = couponData?.discountAmount || 0
-  const hasFreeShipping = couponData?.type === 'free_shipping'
-  const shipping = ((subtotal - couponDiscount) >= 20000 || hasFreeShipping) ? 0 : 1500
+  const shipping = 1500
   const total = subtotal - couponDiscount + shipping
 
   const onSubmit = async (data: FormData) => {
@@ -281,8 +280,8 @@ export default function CheckoutPage() {
                 {couponData && (
                 <div className="flex justify-between font-semibold text-green-600"><span>Discount ({couponData.code})</span><span>-₦{couponData.discountAmount.toLocaleString()}</span></div>
               )}
-              <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span className="text-green-600">{shipping === 0 ? 'Free' : `₦${shipping.toLocaleString()}`}</span></div>
-                {shipping > 0 && <p className="text-xs text-gray-400">Free shipping on orders over ₦20,000</p>}
+              <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>₦{shipping.toLocaleString()}</span></div>
+                <p className="text-xs text-gray-400">Delivery fee calculated at checkout</p>
                 <div className="flex justify-between font-extrabold text-base border-t border-gray-100 pt-2">
                   <span>Total</span>
                   <span className="text-orange-600">₦{total.toLocaleString()}</span>

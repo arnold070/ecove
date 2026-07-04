@@ -29,7 +29,6 @@ function LoginContent() {
 
   const bannerMessages: Record<string, { msg: string; warn: boolean }> = {
     admin_only:      { msg: 'Admin access only. Please sign in with an admin account.', warn: true },
-    vendor_only:     { msg: 'Vendor dashboard access only. Please sign in as a vendor.', warn: true },
     session_expired: { msg: 'Your session expired. Please sign in again.', warn: true },
   }
   const banner = reason ? bannerMessages[reason] : null
@@ -167,8 +166,8 @@ function LoginContent() {
           </div>
 
           <div className="mt-4 text-center">
-            <Link href="/vendor/register" className="text-sm text-gray-400 hover:text-orange-500">
-              Want to sell on Ecove? Apply as a vendor →
+            <Link href="/partners" className="text-sm text-gray-400 hover:text-orange-500">
+              Interested in partnering with Ecove? →
             </Link>
           </div>
         </div>

@@ -95,8 +95,6 @@ async function main() {
     'site.phone':           '+234 800 ECOVE (32683)',
     'site.currency':        'NGN',
     'site.currency_symbol': '₦',
-    'vendor.registration.open': 'true',
-    'vendor.auto_approve':       'false',
     'product.auto_approve':      'false',
     'payout.min_amount':    '5000',
     'payout.clearing_days': '7',

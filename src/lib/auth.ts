@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import prisma from './prisma'
 import { Role } from '@prisma/client'
 import { signJWT, verifyJWT } from './jwt'
+import { Permission } from './permissions'
 
 export interface JWTPayload {
   sub: string        // userId
@@ -67,4 +68,26 @@ export class AuthError extends Error {
     super(message)
     this.status = status
   }
+}
+
+// Gate an admin API route behind a specific granular permission.
+// super_admin always passes — every other admin-role user is a sub-admin
+// gated by their permissions[] array.
+export async function requirePermission(
+  req: NextRequest,
+  permission: Permission,
+  allowedRoles: Role[] = ['admin', 'super_admin']
+): Promise<JWTPayload> {
+  const auth = await requireAuth(req, allowedRoles)
+  if (auth.role === 'super_admin') return auth
+
+  const user = await prisma.user.findUnique({
+    where: { id: auth.sub },
+    select: { permissions: true, isActive: true },
+  })
+  if (!user?.isActive) throw new AuthError('Forbidden', 403)
+  if (!user.permissions.includes(permission)) {
+    throw new AuthError(`Forbidden — missing permission: ${permission}`, 403)
+  }
+  return auth
 }

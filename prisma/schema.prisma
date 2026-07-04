@@ -66,7 +66,6 @@ enum CommissionType {
 enum CouponType {
   percentage
   fixed
-  free_shipping
   buy_x_get_y
 }
 
@@ -98,6 +97,15 @@ enum NotificationType {
   payout_paid
   payout_rejected
   review_flagged
+  partnership_inquiry
+}
+
+enum PartnerInquiryStatus {
+  new
+  reviewing
+  contacted
+  converted
+  rejected
 }
 
 model User {
@@ -116,7 +124,10 @@ model User {
   resetTokenExpiry   DateTime?
   avatarUrl          String?
   lastLoginAt        DateTime?
+  permissions        String[]  @default([])
+  invitedById        String?
   vendor             Vendor?
+  managedVendors     Vendor[]  @relation("VendorManager")
   addresses          Address[]
   orders             Order[]
   reviews            Review[]
@@ -143,8 +154,13 @@ model Session {
 
 model Vendor {
   id                  String       @id @default(uuid())
-  userId              String       @unique
-  user                User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String?      @unique
+  user                User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  managedById         String?
+  manager             User?        @relation("VendorManager", fields: [managedById], references: [id])
+  isVisible           Boolean      @default(true)
+  isFeatured          Boolean      @default(false)
+  categoryTags        String[]     @default([])
   businessName        String
   slug                String       @unique
   description         String?
@@ -550,4 +566,31 @@ model SiteSetting {
   value     String
   updatedAt DateTime @updatedAt
   @@map("site_settings")
+}
+
+model PartnerInquiry {
+  id                       String               @id @default(uuid())
+  businessName             String
+  contactPerson            String
+  email                    String
+  phone                    String
+  location                 String
+  businessType             String
+  industry                 String
+  numberOfProducts         Int?
+  estimatedMonthlyCapacity String?
+  shortDescription         String
+  website                  String?
+  socialLinks              String[]             @default([])
+  companyProfileUrl        String?
+  message                  String?
+  status                   PartnerInquiryStatus @default(new)
+  reviewedAt               DateTime?
+  reviewedById             String?
+  adminNote                String?
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
+  @@index([status])
+  @@index([createdAt])
+  @@map("partner_inquiries")
 }

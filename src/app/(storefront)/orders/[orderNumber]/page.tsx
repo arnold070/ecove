@@ -139,7 +139,7 @@ export default function OrderDetailPage({ params }: { params: { orderNumber: str
           <div className="space-y-2 text-sm">
             <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>₦{parseFloat(order.subtotal).toLocaleString()}</span></div>
             {parseFloat(order.discount) > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>−₦{parseFloat(order.discount).toLocaleString()}</span></div>}
-            <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>{parseFloat(order.shippingFee) === 0 ? 'Free' : `₦${parseFloat(order.shippingFee).toLocaleString()}`}</span></div>
+            <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>₦{parseFloat(order.shippingFee).toLocaleString()}</span></div>
             <div className="flex justify-between font-extrabold text-base border-t pt-2 mt-2">
               <span>Total Paid</span>
               <span className="text-orange-600">₦{parseFloat(order.total).toLocaleString()}</span>

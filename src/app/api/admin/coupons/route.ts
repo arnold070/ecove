@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
-import { requireAuth } from '@/lib/auth'
+import { requirePermission } from '@/lib/auth'
 import { ok, created, handleError } from '@/lib/api'
 
 const schema = z.object({
   code:           z.string().min(3).max(30).toUpperCase(),
-  type:           z.enum(['percentage','fixed','free_shipping','buy_x_get_y']),
+  type:           z.enum(['percentage','fixed','buy_x_get_y']),
   value:          z.number().positive().optional(),
   minOrderAmount: z.number().positive().optional(),
   maxUses:        z.number().int().positive().optional(),
@@ -17,7 +17,7 @@ const schema = z.object({
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'promotions.manage')
     const coupons = await prisma.coupon.findMany({ orderBy: { createdAt: 'desc' } })
     return ok(coupons)
   } catch (err) { return handleError(err) }
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'promotions.manage')
     const body = schema.parse(await req.json())
     const data: any = { ...body }
     if (body.startDate) data.startDate = new Date(body.startDate)
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'promotions.manage')
     const body = z.object({ id: z.string(), ...schema.shape }).parse(await req.json())
     const { id, ...rest } = body
     const data: any = { ...rest }
@@ -50,7 +50,7 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    await requireAuth(req, ['admin', 'super_admin'])
+    await requirePermission(req, 'promotions.manage')
     const { id } = z.object({ id: z.string() }).parse(await req.json())
     await prisma.coupon.delete({ where: { id } })
     return ok({ message: 'Coupon deleted.' })

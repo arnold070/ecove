@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
       select: {
         id: true, firstName: true, lastName: true, email: true, phone: true,
         role: true, avatarUrl: true, isEmailVerified: true, lastLoginAt: true,
+        permissions: true,
         vendor: {
           select: {
             id: true, businessName: true, slug: true, status: true,

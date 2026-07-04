@@ -50,9 +50,12 @@ export default function AdminVendorsPage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-extrabold text-gray-900">Vendor Management</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{pagination?.total || 0} total vendors</p>
+          <h1 className="text-xl font-extrabold text-gray-900">Stores</h1>
+          <p className="text-sm text-gray-400 mt-0.5">{pagination?.total || 0} total stores</p>
         </div>
+        <Link href="/admin/vendors/new" className="px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-colors" style={{ background: '#f68b1f' }}>
+          + Create Store
+        </Link>
       </div>
 
       {/* Status tabs */}
@@ -76,7 +79,7 @@ export default function AdminVendorsPage() {
         ) : vendors.length === 0 ? (
           <div className="py-20 text-center text-gray-400">
             <div className="text-5xl mb-3">🏪</div>
-            <p className="font-semibold text-gray-600">No vendors found</p>
+            <p className="font-semibold text-gray-600">No stores found</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -119,6 +122,7 @@ export default function AdminVendorsPage() {
                           </>}
                           {v.status === 'approved' && <button onClick={() => doAction(v.id, 'suspend')} className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-yellow-100 text-yellow-700 hover:bg-yellow-600 hover:text-white transition-colors">⏸ Suspend</button>}
                           {v.status === 'suspended' && <button onClick={() => doAction(v.id, 'activate')} className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-green-100 text-green-700 hover:bg-green-600 hover:text-white transition-colors">▶ Activate</button>}
+                          <Link href={`/admin/vendors/${v.id}/edit`} className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-gray-100 text-gray-700 hover:bg-gray-700 hover:text-white transition-colors">✏️ Edit</Link>
                           <Link href={`/store/${v.slug}`} target="_blank" className="text-xs px-2.5 py-1.5 rounded-lg font-bold bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white transition-colors">🏪 Store</Link>
                         </div>
                       </td>

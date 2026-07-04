@@ -193,13 +193,8 @@ export async function POST(req: NextRequest) {
       couponDiscount = coupon.value
     }
 
-    // Shipping fee: free over ₦20,000 (after discounts), else ₦1,500
-    // Also free if a free_shipping coupon is applied
-    const afterDiscount = subtotal.minus(couponDiscount)
-    const hasFreeShippingCoupon = coupon?.type === 'free_shipping'
-    const shippingFee = (afterDiscount.gte(20000) || hasFreeShippingCoupon)
-      ? new Decimal(0)
-      : new Decimal(1500)
+    // Shipping fee: flat calculated delivery fee, always applied
+    const shippingFee = new Decimal(1500)
     const total       = subtotal.minus(couponDiscount).add(shippingFee).toDecimalPlaces(2)
 
     // ── 4. Create order in transaction ──────────────────────

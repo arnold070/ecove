@@ -51,66 +51,52 @@ export async function sendPasswordReset(to: string, firstName: string, token: st
   `))
 }
 
-// ── Vendor emails ────────────────────────────────────────────────────────────
-
-export async function sendVendorApplicationReceived(to: string, businessName: string) {
-  await send(to, 'Vendor Application Received – Ecove', layout(`
-    <h2>Application Received! 📋</h2>
-    <p>Hi, thank you for applying to sell on Ecove Marketplace as <strong>${businessName}</strong>.</p>
-    <p>Our admin team will review your application within <strong>24–48 hours</strong>. You'll receive an email notification once a decision is made.</p>
-    <p>While you wait, you can explore the marketplace at <a href="${APP_URL}">${APP_URL}</a></p>
-  `))
-}
+// ── Store emails ─────────────────────────────────────────────────────────────
+// Stores are created and managed internally by Ecove admins — these are
+// informational notices to a store's contact, not self-service account emails.
 
 export async function sendVendorApproved(to: string, businessName: string) {
-  const link = `${APP_URL}/vendor/dashboard`
-  await send(to, '🎉 Your Ecove Vendor Account is Approved!', layout(`
-    <h2>Congratulations! You're now an Ecove Vendor 🎉</h2>
-    <p>Your vendor application for <strong>${businessName}</strong> has been <strong>approved</strong>!</p>
-    <p>You can now log in and start listing products. Every product requires admin approval before going live.</p>
-    <p style="text-align:center"><a href="${link}" class="btn">Go to Vendor Dashboard</a></p>
+  await send(to, '🎉 Your Ecove Store is Live!', layout(`
+    <h2>Congratulations! Your store is now live 🎉</h2>
+    <p>Your Ecove store, <strong>${businessName}</strong>, has been approved and is now live on the marketplace.</p>
+    <p>Your Ecove account manager will be in touch to coordinate products and inventory.</p>
   `))
 }
 
 export async function sendVendorRejected(to: string, businessName: string, reason: string) {
-  await send(to, 'Ecove Vendor Application Update', layout(`
+  await send(to, 'Ecove Partnership Update', layout(`
     <h2>Application Update</h2>
     <p>Hi, we've reviewed your application for <strong>${businessName}</strong>.</p>
     <p>Unfortunately, we are unable to approve your application at this time.</p>
     <p><strong>Reason:</strong> ${reason}</p>
-    <p>You may reapply after addressing the feedback above. Contact us at vendors@ecove.com.ng if you have questions.</p>
+    <p>Contact us at partnerships@ecove.com.ng if you have questions.</p>
   `))
 }
 
 export async function sendVendorSuspended(to: string, businessName: string, reason: string) {
-  await send(to, 'Your Ecove Vendor Account Has Been Suspended', layout(`
-    <h2>Account Suspended ⚠️</h2>
-    <p>Your vendor account for <strong>${businessName}</strong> has been suspended.</p>
+  await send(to, 'Your Ecove Store Has Been Suspended', layout(`
+    <h2>Store Suspended ⚠️</h2>
+    <p>Your Ecove store, <strong>${businessName}</strong>, has been suspended.</p>
     <p><strong>Reason:</strong> ${reason}</p>
-    <p>Contact us at vendors@ecove.com.ng to appeal this decision.</p>
+    <p>Contact us at partnerships@ecove.com.ng to appeal this decision.</p>
   `))
 }
 
 // ── Product emails ───────────────────────────────────────────────────────────
 
 export async function sendProductApproved(to: string, productName: string) {
-  const link = `${APP_URL}/vendor/products`
   await send(to, `✅ Product Approved: ${productName}`, layout(`
     <h2>Product Approved!</h2>
-    <p>Great news! Your product <strong>"${productName}"</strong> has been approved and is now <strong>live on Ecove Marketplace</strong>.</p>
+    <p>Great news! The product <strong>"${productName}"</strong> has been approved and is now <strong>live on Ecove Marketplace</strong>.</p>
     <p>Customers can now find and purchase it.</p>
-    <p style="text-align:center"><a href="${link}" class="btn">View My Products</a></p>
   `))
 }
 
 export async function sendProductRejected(to: string, productName: string, reason: string) {
-  const link = `${APP_URL}/vendor/products`
   await send(to, `Product Needs Revision: ${productName}`, layout(`
     <h2>Product Requires Changes</h2>
-    <p>Your product <strong>"${productName}"</strong> could not be approved in its current form.</p>
-    <p><strong>Reason from admin:</strong> ${reason}</p>
-    <p>Please edit your product, address the feedback, and resubmit for review.</p>
-    <p style="text-align:center"><a href="${link}" class="btn">Edit My Products</a></p>
+    <p>The product <strong>"${productName}"</strong> could not be approved in its current form.</p>
+    <p><strong>Reason:</strong> ${reason}</p>
   `))
 }
 
@@ -138,13 +124,11 @@ export async function sendVendorNewOrder(
   orderNumber: string,
   itemSummary: string
 ) {
-  const link = `${APP_URL}/vendor/orders`
   await send(to, `New Order Received – #${orderNumber}`, layout(`
-    <h2>You have a new order! 🛍️</h2>
-    <p>Hi ${vendorName}, a customer just placed an order for your products.</p>
+    <h2>New order for ${vendorName} 🛍️</h2>
+    <p>A customer just placed an order for products from <strong>${vendorName}</strong>.</p>
     <p><strong>Order #${orderNumber}</strong><br/>${itemSummary}</p>
-    <p>Please process and ship this order within your stated handling time.</p>
-    <p style="text-align:center"><a href="${link}" class="btn">View Order</a></p>
+    <p>Please coordinate fulfillment with the Ecove operations team.</p>
   `))
 }
 

@@ -67,9 +67,8 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: '/dashboard', destination: '/vendor/dashboard', permanent: false },
-      { source: '/seller',    destination: '/vendor/register',  permanent: false },
-      { source: '/apply',     destination: '/vendor/register',  permanent: false },
+      { source: '/seller', destination: '/partners', permanent: false },
+      { source: '/apply',  destination: '/partners', permanent: false },
     ]
   },
   // Disable powered-by header

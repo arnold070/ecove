@@ -78,7 +78,7 @@ export default function RegisterPage() {
             </button>
           </form>
           <p className="mt-5 text-center text-sm text-gray-500">Already have an account? <Link href="/login" className="text-orange-500 font-semibold hover:underline">Sign in</Link></p>
-          <p className="mt-3 text-center"><Link href="/vendor/register" className="text-xs text-gray-400 hover:text-orange-500">Want to sell on Ecove? Apply as a vendor →</Link></p>
+          <p className="mt-3 text-center"><Link href="/partners" className="text-xs text-gray-400 hover:text-orange-500">Interested in partnering with Ecove? →</Link></p>
         </div>
       </div>
     </div>
