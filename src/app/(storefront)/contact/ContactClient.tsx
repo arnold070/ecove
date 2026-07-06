@@ -142,7 +142,8 @@ export default function ContactClient() {
                 <p className="text-white/70 text-sm leading-relaxed">
                   Ecove Marketplace Ltd<br />
                   Oceanic Plaza, 1 Lady Muonye Street<br />
-                  off 7th Road, Nigeria
+                  off 74 Road, behind Ibori Golf Club<br />
+                  Asaba, Delta State, Nigeria
                 </p>
                 <span className="inline-block mt-4 text-xs font-extrabold text-orange-400 bg-orange-400/10 border border-orange-400/20 px-3 py-1.5 rounded-lg">
                   MAP COMING SOON

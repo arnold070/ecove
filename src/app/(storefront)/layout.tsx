@@ -743,7 +743,7 @@ function Footer() {
           </p>
           <p className="text-gray-500 text-xs mt-3">📞 +234 816 887 7630 / +234 814 729 3335</p>
           <p className="text-gray-500 text-xs mt-1">✉️ hello@ecove.com.ng</p>
-          <p className="text-gray-500 text-xs mt-1">📍 Oceanic Plaza, 1 Lady Muonye Street, off 7th Road</p>
+          <p className="text-gray-500 text-xs mt-1">📍 Oceanic Plaza, 1 Lady Muonye Street, off 74 Road, behind Ibori Golf Club, Asaba, Delta State</p>
         </div>
 
         {/* Link columns */}
