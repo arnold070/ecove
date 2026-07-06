@@ -263,8 +263,8 @@ export default function AboutClient() {
           <div className="space-y-3">
             {[
               { icon: '✉️', label: 'Email Us',        value: 'hello@ecove.com.ng',         href: 'mailto:hello@ecove.com.ng', badge: null },
-              { icon: '📞', label: 'Call Support',    value: '+234 800 ECOVE (32683)',      href: 'tel:+2348003268300',        badge: null },
-              { icon: '📍', label: 'Headquarters',    value: 'Asaba, Delta State, Nigeria', href: null,                        badge: 'MAP' },
+              { icon: '📞', label: 'Call Support',    value: '+234 816 887 7630 / +234 814 729 3335', href: 'tel:+2348168877630', badge: null },
+              { icon: '📍', label: 'Headquarters',    value: 'Oceanic Plaza, 1 Lady Muonye Street, off 7th Road', href: null,   badge: 'MAP' },
             ].map(({ icon, label, value, href, badge }) => (
               <div key={label}
                 className="flex items-center justify-between p-5 rounded-2xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/30 transition-all group cursor-pointer">

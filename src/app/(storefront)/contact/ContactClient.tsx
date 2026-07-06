@@ -109,16 +109,16 @@ export default function ContactClient() {
             </a>
 
             {/* Phone */}
-            <a href="tel:+2348003268300"
+            <a href="tel:+2348168877630"
               className="group flex flex-col items-center text-center p-8 rounded-2xl border-2 border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-200">
               <span className="w-16 h-16 rounded-2xl bg-blue-50 group-hover:bg-blue-100 transition-colors flex items-center justify-center text-3xl mb-5">📞</span>
               <h3 className="font-extrabold text-gray-900 text-lg mb-1">Call Us</h3>
               <p className="text-sm text-gray-400 mb-3 leading-relaxed">Mon – Fri, 8am – 6pm WAT.</p>
-              <span className="text-blue-600 font-bold text-sm group-hover:underline">+234 800 ECOVE (32683)</span>
+              <span className="text-blue-600 font-bold text-sm group-hover:underline">+234 816 887 7630 / +234 814 729 3335</span>
             </a>
 
             {/* WhatsApp */}
-            <a href="https://wa.me/2348003268300" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/2348168877630" target="_blank" rel="noopener noreferrer"
               className="group flex flex-col items-center text-center p-8 rounded-2xl border-2 border-gray-100 hover:border-green-300 hover:shadow-lg transition-all duration-200">
               <span className="w-16 h-16 rounded-2xl bg-green-50 group-hover:bg-green-100 transition-colors flex items-center justify-center text-3xl mb-5">💬</span>
               <h3 className="font-extrabold text-gray-900 text-lg mb-1">WhatsApp</h3>
@@ -141,8 +141,8 @@ export default function ContactClient() {
                 <h3 className="font-extrabold text-white text-lg mb-2">Our Headquarters</h3>
                 <p className="text-white/70 text-sm leading-relaxed">
                   Ecove Marketplace Ltd<br />
-                  Asaba, Delta State<br />
-                  Nigeria
+                  Oceanic Plaza, 1 Lady Muonye Street<br />
+                  off 7th Road, Nigeria
                 </p>
                 <span className="inline-block mt-4 text-xs font-extrabold text-orange-400 bg-orange-400/10 border border-orange-400/20 px-3 py-1.5 rounded-lg">
                   MAP COMING SOON

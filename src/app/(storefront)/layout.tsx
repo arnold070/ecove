@@ -76,7 +76,7 @@ function Header() {
       <div className="bg-gray-900 text-white py-1.5 text-xs hidden sm:block">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-5">
-            <span className="flex items-center gap-1.5"><span>📞</span> +234 800 ECOVE (32683)</span>
+            <span className="flex items-center gap-1.5"><span>📞</span> +234 816 887 7630</span>
             <span className="text-white/40">|</span>
             <Link href="/partners" className="hover:text-orange-400 transition-colors">Partner With Us</Link>
           </div>
@@ -741,8 +741,9 @@ function Footer() {
           <p className="text-gray-400 text-sm leading-relaxed">
             Nigeria's fastest-growing multi-vendor marketplace. Shop from verified sellers nationwide.
           </p>
-          <p className="text-gray-500 text-xs mt-3">📞 +234 800 ECOVE (32683)</p>
+          <p className="text-gray-500 text-xs mt-3">📞 +234 816 887 7630 / +234 814 729 3335</p>
           <p className="text-gray-500 text-xs mt-1">✉️ hello@ecove.com.ng</p>
+          <p className="text-gray-500 text-xs mt-1">📍 Oceanic Plaza, 1 Lady Muonye Street, off 7th Road</p>
         </div>
 
         {/* Link columns */}
