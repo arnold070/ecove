@@ -7,6 +7,45 @@ const WEBHOOK_PATTERN = /^\/api\/webhooks\//
 // Always-allowed production origins (env var may not include www variant)
 const PRODUCTION_ORIGINS = ['https://ecove.com.ng', 'https://www.ecove.com.ng']
 
+// ── Maintenance mode ──────────────────────────────────────
+// Set MAINTENANCE_MODE=true to take the site offline. Payment webhooks
+// stay reachable so in-flight Paystack/Flutterwave callbacks aren't lost.
+const MAINTENANCE_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecove — Down for Maintenance</title>
+<style>
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:#0f172a; color:#f8fafc; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; text-align:center; padding:24px; }
+  .card { max-width:480px; }
+  h1 { font-size:1.5rem; margin-bottom:0.5rem; }
+  p { color:#94a3b8; line-height:1.6; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>We'll be right back</h1>
+    <p>Ecove is undergoing scheduled maintenance. Please check back shortly.</p>
+  </div>
+</body>
+</html>`
+
+function maintenanceCheck(req: NextRequest): NextResponse | null {
+  if (process.env.MAINTENANCE_MODE !== 'true') return null
+  const { pathname } = req.nextUrl
+  if (WEBHOOK_PATTERN.test(pathname)) return null
+
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.json({ error: 'Service temporarily unavailable for maintenance' }, { status: 503 })
+  }
+  return new NextResponse(MAINTENANCE_HTML, {
+    status: 503,
+    headers: { 'Content-Type': 'text/html; charset=utf-8', 'Retry-After': '3600' },
+  })
+}
+
 function csrfCheck(req: NextRequest): NextResponse | null {
   const { pathname } = req.nextUrl
   if (!pathname.startsWith('/api/') || !MUTATION_METHODS.has(req.method) || WEBHOOK_PATTERN.test(pathname)) {
@@ -42,6 +81,10 @@ const PROTECTED_API = [
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+
+  // ── Maintenance mode — short-circuit everything else ─────
+  const maintenanceRes = maintenanceCheck(req)
+  if (maintenanceRes) return maintenanceRes
 
   // ── CSRF protection — reject cross-origin mutations ──────
   const csrfError = csrfCheck(req)
